@@ -5,21 +5,16 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.stereotype.Component;
-
-import bitcamp.java106.pms.controller.Controller;
-import bitcamp.java106.pms.dao.MemberDao;
 import bitcamp.java106.pms.dao.TeamDao;
-import bitcamp.java106.pms.server.ServerRequest;
-import bitcamp.java106.pms.server.ServerResponse;
 import bitcamp.java106.pms.servlet.InitServlet;
 
 @SuppressWarnings("serial")
-@Component("/team/delete")
+@WebServlet("/team/delete")
 public class TeamDeleteServlet extends HttpServlet {
 
     TeamDao teamDao;
