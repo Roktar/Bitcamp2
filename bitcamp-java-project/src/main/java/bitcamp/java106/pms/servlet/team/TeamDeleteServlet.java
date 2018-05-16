@@ -47,7 +47,7 @@ public class TeamDeleteServlet extends HttpServlet {
         out.println("</head>");
         out.println("<body>");
         out.println("<h1>팀 삭제 결과</h1>");
-        
+         
         try {
             int count = teamDao.delete(name);
     
