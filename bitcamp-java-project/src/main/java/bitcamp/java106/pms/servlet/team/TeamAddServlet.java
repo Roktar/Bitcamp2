@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import bitcamp.java106.pms.dao.TeamDao;
 import bitcamp.java106.pms.domain.Team;
+import bitcamp.java106.pms.servlet.InitServlet;
 
 @SuppressWarnings("serial")
 @WebServlet("/team/add")
@@ -20,9 +21,11 @@ public class TeamAddServlet extends HttpServlet {
 
     TeamDao teamDao;
     
-    public TeamAddServlet(TeamDao teamDao) {
-        this.teamDao = teamDao;
+    @Override
+    public void init() throws ServletException {
+        teamDao = InitServlet.getApplicationContext().getBean(TeamDao.class);
     }
+    
 
     
     @Override
