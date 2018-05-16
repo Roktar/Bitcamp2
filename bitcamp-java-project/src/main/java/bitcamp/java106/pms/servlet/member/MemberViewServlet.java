@@ -31,7 +31,7 @@ public class MemberViewServlet extends HttpServlet {
             HttpServletRequest request, 
             HttpServletResponse response) throws ServletException, IOException {
         
-        //request.setCharacterEncoding("UTF-8");
+        request.setCharacterEncoding("UTF-8");
         String id = request.getParameter("id");
         
         response.setContentType("text/html;charset=UTF-8");
@@ -53,13 +53,13 @@ public class MemberViewServlet extends HttpServlet {
             }
             out.println("<table border='1'>");
             out.println("<tr><th>아이디</th><td>");
-            out.printf("    <input type='text' name='no' value='%d' readonly></td></tr>\n", 
+            out.printf("    <input type='text' name='id' value='%s' readonly></td></tr>\n", 
                     member.getId());
             out.println("<tr><th>이메일</th>");
-            out.printf("    <td><input type='text' name='title' value='%s'></td></tr>\n",
+            out.printf("    <td><input type='text' name='email' value='%s'></td></tr>\n",
                     member.getEmail());
             out.println("<tr><th>암호</th>");
-            out.printf("    <td><input type='text' name='title' value='-'></td></tr>\n");
+            out.printf("    <td><input type='text' name='password' value='-'></td></tr>\n");
             out.println("</table>");
             
         } catch (Exception e) {
