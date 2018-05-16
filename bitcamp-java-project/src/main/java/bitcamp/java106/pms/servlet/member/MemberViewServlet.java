@@ -71,7 +71,6 @@ public class MemberViewServlet extends HttpServlet {
         out.println("<button>변경</button>");
         out.printf("<a href='delete?no=%d'>삭제</a>\n", id);
         out.println("</p>");
-        out.println("</form>");
         out.println("</body>");
         out.println("</html>");
     }
