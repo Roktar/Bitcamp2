@@ -60,7 +60,7 @@ public class TeamViewServlet extends HttpServlet {
             out.printf("    <td><input type='text' name='maxqty' value='%s'></td></tr>\n",
                     team.getMaxQty());
             out.println("<tr><th>기간</th>");
-            out.printf("    <td><input type='text' name='startdate' value='%s'> ~ <input type='text' name='enddate' value='%s'></td></tr>\n",
+            out.printf("    <td><input type='text' name='startDate' value='%s'> ~ <input type='text' name='endDate' value='%s'></td></tr>\n",
                     team.getStartDate(), team.getEndDate());
             
         } catch (Exception e) {
@@ -70,7 +70,7 @@ public class TeamViewServlet extends HttpServlet {
         out.println("<p>");
         out.println("<a href='list'>목록</a>");
         out.println("<button>변경</button>");
-        out.printf("<a href='delete?name=%s'>삭제</a>\n", name);
+        out.printf("<button><a href='delete?no=%s'>삭제</a>\n</button>", name); 
         out.println("</p>");
         out.println("</body>");
         out.println("</html>");
