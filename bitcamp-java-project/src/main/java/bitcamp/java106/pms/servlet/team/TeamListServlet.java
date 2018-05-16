@@ -6,21 +6,17 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.stereotype.Component;
-
-import bitcamp.java106.pms.dao.MemberDao;
 import bitcamp.java106.pms.dao.TeamDao;
 import bitcamp.java106.pms.domain.Team;
-import bitcamp.java106.pms.server.ServerRequest;
-import bitcamp.java106.pms.server.ServerResponse;
 import bitcamp.java106.pms.servlet.InitServlet;
 
 @SuppressWarnings("serial")
-@Component("/team/list")
+@WebServlet("/team/list")
 public class TeamListServlet extends HttpServlet {
 
     TeamDao teamDao;
@@ -50,12 +46,12 @@ public class TeamListServlet extends HttpServlet {
             out.println("<p><a href='form.html'>새 등록</a></p>");
             out.println("<table border='1'>");
             out.println("<tr>");
-            out.println("    <th>이름</th><th>최대인원</th><th>시작일</th><th>종료일</th>");
+            out.println("    <th>이름</th><th>최대인원</th><th>날짜</th>");
             out.println("</tr>");
             for (Team team : list) {
             	out.println("<tr>");
                 out.printf("<td><a href='view?name=%s'>%s</td><td>%d<td>%s~%s</td>\n", 
-                        team.getName(), team.getMaxQty(), 
+                        team.getName(),team.getName(), team.getMaxQty(), 
                         team.getStartDate(), team.getEndDate());
                 out.println("</tr>");
             }
