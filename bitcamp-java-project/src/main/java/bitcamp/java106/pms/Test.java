@@ -9,7 +9,7 @@ public class Test {
         // 그 API를 적용하기 전에 간단한 예제를 만들어 동작을 확인하라!
         String str = "/board/add?title=aaaa&content=bbb";
         System.out.println("dddd");
-        
+          
         ServerRequest request = new ServerRequest(str);
          
         System.out.println(request.getServerPath());
