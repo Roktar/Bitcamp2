@@ -45,7 +45,7 @@ public class ClassroomListServlet extends HttpServlet {
             out.println("<p><a href='form.html'>새 강의실</a></p>");
             out.println("<table border='1'>");
             out.println("<tr>");
-            out.println("    <th>번호</th><th>제목</th><th>시작일</th><th>종료일</th><th>강의실</th><th colspan=2>작업</th>");
+            out.println("    <th>번호</th><th>제목</th><th>시작일</th><th>종료일</th><th>강의실</th><th>작업</th>");
             out.println("</tr>");
             for (Classroom classroom : list) {
             	out.println("<tr>");
