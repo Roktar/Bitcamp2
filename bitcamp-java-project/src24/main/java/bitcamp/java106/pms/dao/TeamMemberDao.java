@@ -14,127 +14,116 @@ import bitcamp.java106.pms.annotation.Component;
 
 @Component
 public class TeamMemberDao {
-    HashMap<String, ArrayList<String>> collection = new HashMap<String, ArrayList<String>>();
     
+    private HashMap<String, ArrayList<String>> collection = new HashMap<>();
+ 
     public TeamMemberDao() throws Exception {
-        this.load();
+        load();
     }
     
     public void load() throws Exception {
-        // 한줄씩 읽어들이는 게 없기때문에 스캐너를 통해 한줄씩 처리
-        Scanner in = new Scanner(new FileReader("data/teamMember.csv"));
-
-        while( true ) {
+        Scanner in = new Scanner(new FileReader("data/teammember.csv"));
+        while (true) {
             try {
                 String[] arr = in.nextLine().split(":");
-                String[] members = arr[1].split(",");
-                System.out.println("키값 : " + arr[0]);
+                String[] idList = arr[1].split(",");
                 ArrayList<String> list = new ArrayList<>();
-                
-                for(String id : members)
+                for (String id : idList) {
                     list.add(id);
-              
+                }
                 collection.put(arr[0], list);
-            } catch (Exception e) { 
-                System.out.println("에러 : " + e.getMessage());
-                break;
-                // 1) 데이터를 다 읽었을 때
-                // 2) 파일 형식에 문제 있을 때
+            } catch (Exception e) { // 데이터를 모두 읽었거나 파일 형식에 문제가 있다면,
+                //e.printStackTrace();
+                break; // 반복문을 나간다.
             }
         }
         in.close();
-        // 저장된 데이터를 한 줄씩 읽는다.
-        // 한 줄에 한 개의 게시물 데이터를 갖는다.
-        // 형식 : 번호, 제목, 내용, 등록일
     }
     
     public void save() throws Exception {
-        PrintWriter out = new PrintWriter(new FileWriter("data/teamMember.csv"));
-        
-        Set<String> keys = collection.keySet();
-        
-        for(String key : keys) {
+        PrintWriter out = new PrintWriter(new FileWriter("data/teammember.csv"));
+        Set<String> keyList = collection.keySet();
+        for (String key : keyList) {
             List<String> idList = collection.get(key);
-            
             out.printf("%s:", key);
-            
-            for(String id : idList)
+            for (String id : idList) {
                 out.printf("%s,", id);
+            }
             out.println();
         }
         out.close();
     }
     
-    // String 매개변수는 컨트롤러에서 각 dao에 접근해서 뽑아온 데이터로 세팅한다.
+    
     public int addMember(String teamName, String memberId) {
+        String teamNameLC = teamName.toLowerCase();
+        String memberIdLC = memberId.toLowerCase();
         
-        String tlc = teamName.toLowerCase();
-        String mlc = memberId.toLowerCase();
-        
-        // TeamName으로 memberId가 들어있는 리스트를 가져온다.
-        ArrayList<String> members = collection.get(tlc);
-        if(members == null) {
-            members = new ArrayList<String>();
-            members.add(memberId);
-            collection.put(teamName, members);
+        // 팀 이름으로 멤버 아이디가 들어 있는 ArrayList를 가져온다.
+        ArrayList<String> members = collection.get(teamNameLC);
+        if (members == null) { // 해당 팀의 멤버가 추가된 적이 없다면,
+            members = new ArrayList<>();
+            members.add(memberIdLC);
+            collection.put(teamNameLC, members);
             return 1;
         }
         
-        // 중복체크, contains는 해당 클래스 안에 그 값을 가진 객체가 있는 지를 찾는다.
-        if(members.contains(mlc)) 
+        // ArrayList에 해당 아이디를 가진 멤버가 들어 있다면,
+        if (members.contains(memberIdLC)) {
             return 0;
- 
-        members.add(memberId);
+        }
         
-        return 1;
-    }
-
-    public int deleteMember(String teamName, String memberId) {
-        
-        String tlc = teamName.toLowerCase();
-        String mlc = memberId.toLowerCase();
-        
-        ArrayList<String> members = collection.get(tlc);
-        
-        if(members == null || !members.contains(mlc))
-            return 0;
-        
-        members.remove(mlc);
-        
+        members.add(memberIdLC);
         return 1;
     }
     
-    public boolean isExist(String teamName, String memberId) {        
+    public int deleteMember(String teamName, String memberId) {
+        String teamNameLC = teamName.toLowerCase();
+        String memberIdLC = memberId.toLowerCase();
         
-        String tlc = teamName.toLowerCase();
-        String mlc = memberId.toLowerCase();
+        ArrayList<String> members = collection.get(teamNameLC);
+        if (members == null || !members.contains(memberIdLC)) 
+            return 0;
+
+        members.remove(memberIdLC);
+        return 1;
+    }
+    
+    public Iterator<String> getMembers(String teamName) {
+        ArrayList<String> members = collection.get(teamName.toLowerCase());
+        if (members == null)
+            return null;
+        return members.iterator();
+    }
+    
+    public boolean isExist(String teamName, String memberId) {
+        String teamNameLC = teamName.toLowerCase();
+        String memberIdLC = memberId.toLowerCase();
         
-        ArrayList<String> members = collection.get(tlc);
-        
-        if(members == null || !members.contains(mlc))
+        // 팀 이름으로 멤버 아이디가 들어 있는 ArrayList를 가져온다.
+        ArrayList<String> members = collection.get(teamNameLC);
+        if (members == null || !members.contains(memberIdLC)) 
             return false;
         
         return true;
-        
-        //return ( collection.get(teamName.toLowerCase()).contains(memberId.toLowerCase()) );
-    } // contains는 ArrayList 클래스단에서 오버라이딩 되잇을거임 아마도
-        
-    public Iterator<String> getMembers(String teamName) {
-        ArrayList<String> members = collection.get(teamName.toLowerCase());
-        
-        if(members == null)
-            return null;
-        
-        return collection.get(teamName.toLowerCase()).iterator();
-    } // 컨트롤러에서 데이터를 건드리지않게 하기 위함.
-    // remove가 있지만 객체를 새로 만들기때문에 기존 리스트와는 접점이 없다고 봐도 되겠다.
-    
-    private ArrayList<String> getTeamMembers(String teamName) {
-        ArrayList<String> members = collection.get(teamName.toLowerCase());
-        if(members == null) {
-            members = new ArrayList<String>();
-            collection.put(teamName, members);
-        }
-        return members;
     }
-} 
+}
+
+// 용어 정리!
+// 메서드 시그너처(method signature) = 함수 프로토타입(function prototype)
+// => 메서드의 이름과 파라미터 형식, 리턴 타입에 대한 정보를 말한다.
+
+//ver 24 - File I/O 적용
+//ver 23 - @Component 애노테이션을 붙인다.
+//ver 19 - 우리 만든 ArrayList 대신 java.util.LinkedList를 사용하여 목록을 다룬다. 
+//ver 18 - ArrayList를 적용하여 객체(의 주소) 목록을 관리한다.
+//ver 17 - 클래스 추가
+
+
+
+
+
+
+
+
+

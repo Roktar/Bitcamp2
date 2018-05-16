@@ -1,2 +1,2 @@
 # 변경 내역
-- AppServer.java 변경
+- HTTPServer.java 변경

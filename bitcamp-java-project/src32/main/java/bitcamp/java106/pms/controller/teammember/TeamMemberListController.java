@@ -2,16 +2,12 @@
 package bitcamp.java106.pms.controller.teammember;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 
 import bitcamp.java106.pms.annotation.Component;
 import bitcamp.java106.pms.controller.Controller;
 import bitcamp.java106.pms.dao.TeamDao;
 import bitcamp.java106.pms.dao.TeamMemberDao;
-import bitcamp.java106.pms.domain.Member;
-import bitcamp.java106.pms.domain.Team;
 import bitcamp.java106.pms.server.ServerRequest;
 import bitcamp.java106.pms.server.ServerResponse;
 
@@ -32,34 +28,22 @@ public class TeamMemberListController implements Controller {
     public void service(ServerRequest request, ServerResponse response) {
         PrintWriter out = response.getWriter();
         String teamName = request.getParameter("teamName");
-        try {
-            Team team = teamDao.selectOne(teamName);
-            if (team == null) {
-                out.printf("%s 팀은 존재하지 않습니다.\n", teamName);
-                return;
-            }
-        } catch(Exception e) {
-            out.println("팀 검색 실패");
-            e.printStackTrace(out);
-        }
-
-        out.print("회원들: ");
         
         try {
-            ArrayList<String> list = teamMemberDao.list(teamName);
-            if (list != null) {
-                for (String member : list) {
-                    out.printf("%s, ", member);
-                }
+            out.print("회원들: ");
+            List<String> list = teamMemberDao.selectList(teamName);
+            for (String memberId : list) {
+                out.printf("%s, ", memberId);
             }
-        } catch(Exception e) {
-            out.println("리스트 수신 실패");
+            out.println();
+        } catch (Exception e) {
+            out.println("목록 가져오기 실패!");
             e.printStackTrace(out);
         }
-        out.println();
     }
 }
 
+//ver 31 - JDBC API가 적용된 DAO 사용
 //ver 28 - 네트워크 버전으로 변경
 //ver 26 - TeamMemberController에서 list() 메서드를 추출하여 클래스로 정의.
 //ver 23 - @Component 애노테이션을 붙인다.

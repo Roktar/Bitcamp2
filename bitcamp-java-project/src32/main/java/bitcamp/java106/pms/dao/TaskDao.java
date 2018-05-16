@@ -1,7 +1,6 @@
 package bitcamp.java106.pms.dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -17,31 +16,27 @@ import bitcamp.java106.pms.jdbc.DataSource;
 
 @Component
 public class TaskDao {
-    
+
     DataSource dataSource;
     
     public TaskDao(DataSource dataSource) {
         this.dataSource = dataSource;
     }
-    
+            
     public int delete(int no) throws Exception {
         try (
-            java.sql.Connection con = dataSource.getConnection();     
+            Connection con = dataSource.getConnection();
             PreparedStatement stmt = con.prepareStatement(
                 "delete from pms_task where tano=?");) {
             
             stmt.setInt(1, no);
             return stmt.executeUpdate();
-        } catch (Exception e) {
-            //System.out.println("오류!");
-            // 로그 파일에 기록을 남긴다.
-            throw e;
-        }
+        } 
     }
     
     public List<Task> selectList(String teamName) throws Exception {
         try (
-            java.sql.Connection con = dataSource.getConnection();     
+            Connection con = dataSource.getConnection();
             PreparedStatement stmt = con.prepareStatement(
                 "select tano,titl,sdt,edt,stat,mid from pms_task where tnm=?");) {
             
@@ -65,7 +60,7 @@ public class TaskDao {
 
     public int insert(Task task) throws Exception {
         try (
-            java.sql.Connection con = dataSource.getConnection();     
+            Connection con = dataSource.getConnection();
             PreparedStatement stmt = con.prepareStatement(
                 "insert into pms_task(titl,sdt,edt,mid,tnm) values(?,?,?,?,?)");) {
             
@@ -80,7 +75,7 @@ public class TaskDao {
 
     public int update(Task task) throws Exception {
         try (
-            java.sql.Connection con = dataSource.getConnection();     
+            Connection con = dataSource.getConnection();
             PreparedStatement stmt = con.prepareStatement(
                 "update pms_task set titl=?,sdt=?,edt=?,mid=?,tnm=? where tano=?");) {
             
@@ -96,7 +91,7 @@ public class TaskDao {
 
     public Task selectOne(int no) throws Exception {
         try (
-            java.sql.Connection con = dataSource.getConnection();     
+            Connection con = dataSource.getConnection();
             PreparedStatement stmt = con.prepareStatement(
                 "select titl,sdt,edt,stat,mid,tnm from pms_task where tano=?");) {
             
@@ -120,11 +115,10 @@ public class TaskDao {
     }
 
     public int updateState(int no, int state) throws Exception {
-        
         try (
-            java.sql.Connection con = dataSource.getConnection();     
+            Connection con = dataSource.getConnection();
             PreparedStatement stmt = con.prepareStatement(
-                "update pms_task set stat where tano=?");) {
+                "update pms_task set stat=? where tano=?");) {
             
             stmt.setInt(1, state);
             stmt.setInt(2, no);
@@ -133,6 +127,7 @@ public class TaskDao {
     }
 }
 
+//ver 32 - DB 커넥션 풀 적용
 //ver 31 - JDBC API 적용
 //ver 24 - File I/O 적용
 //ver 23 - @Component 애노테이션을 붙인다.
@@ -140,3 +135,8 @@ public class TaskDao {
 //ver 19 - 우리 만든 ArrayList 대신 java.util.LinkedList를 사용하여 목록을 다룬다. 
 //ver 18 - ArrayList 클래스를 적용하여 객체(의 주소) 목록을 관리한다.
 // ver 17 - 클래스 생성
+
+
+
+
+

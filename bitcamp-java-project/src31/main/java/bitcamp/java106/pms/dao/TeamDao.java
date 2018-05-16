@@ -1,134 +1,120 @@
 package bitcamp.java106.pms.dao;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Scanner;
-import java.util.TimeZone;
 
 import bitcamp.java106.pms.annotation.Component;
-import bitcamp.java106.pms.domain.Member;
 import bitcamp.java106.pms.domain.Team;
 
 @Component
 public class TeamDao {
-    
     public int delete(String name) throws Exception {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        
-        try(
-             java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/java106db?serverTimezone=UTC&useSSL=false", "java106", "1111");    
-             PreparedStatement stmt = con.prepareStatement("Delete FROM pms_team where name = ?");
-            ) {
+        try (
+            Connection con = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/java106db?serverTimezone=UTC&useSSL=false",
+                "java106", "1111");
+            PreparedStatement stmt = con.prepareStatement(
+                "delete from pms_team where name=?");) {
             
             stmt.setString(1, name);
-            
             return stmt.executeUpdate();
-        }
+        } 
     }
     
     public List<Team> selectList() throws Exception {
-        List<Team> arr = new ArrayList<>();
-        
         Class.forName("com.mysql.cj.jdbc.Driver");
-        
-        try( 
-             java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/java106db?serverTimezone=UTC&useSSL=false", "java106", "1111");
-             PreparedStatement stmt = con.prepareStatement("select * from pms_team");
-             ResultSet rs = stmt.executeQuery();
-           ) {
-            while(rs.next()) {
+        try (
+            Connection con = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/java106db?serverTimezone=UTC&useSSL=false",
+                "java106", "1111");
+            PreparedStatement stmt = con.prepareStatement(
+                "select name, sdt, edt, max_qty from pms_team");
+            ResultSet rs = stmt.executeQuery();) {
+            
+            ArrayList<Team> arr = new ArrayList<>();
+            while (rs.next()) {
                 Team team = new Team();
                 team.setName(rs.getString("name"));
-                team.setDescription(rs.getString("name"));
                 team.setStartDate(rs.getDate("sdt"));
                 team.setEndDate(rs.getDate("edt"));
                 team.setMaxQty(rs.getInt("max_qty"));
                 arr.add(team);
             }
+            return arr;
         }
-        return arr;
     }
-    
+
     public int insert(Team team) throws Exception {
-        
-        Scanner sc = new Scanner(System.in);
-        
         Class.forName("com.mysql.cj.jdbc.Driver");
-        
-        try( 
-           Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/java106db?serverTimezone=UTC&useSSL=false", "java106", "1111");
-           PreparedStatement pstmt = con.prepareStatement("INSERT INTO pms_team VALUES(?, ?, ?, ?, ?)");
-           ) {
-            pstmt.setString(1, team.getName());
-            pstmt.setString(2, team.getDescription());
-            pstmt.setInt(3, team.getMaxQty());
-            pstmt.setDate(4, team.getStartDate(), Calendar.getInstance(Locale.KOREAN));
-            pstmt.setDate(5, team.getEndDate(), Calendar.getInstance(Locale.KOREAN));
-            // or serverTimezone=Asia/Seoul을 줘도 된다.
-            // 추후 접속지역에 따라 Locale 정보를 다르게 줘야하는 방법.
-            // or 문자열로 날짜를 집어넣을 것.
-    
-            // Statement 객체를 사용하여 DBMS에 SQL문을 전송한다.
-            return pstmt.executeUpdate();
-        }
-    }
-    
-    public int update(Team team) throws Exception {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        
         try (
-            java.sql.Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/java106db?serverTimezone=UTC&useSSL=false", "java106", "1111");
-            PreparedStatement stmt = con.prepareStatement("Update pms_Team SET dscrt=?, max_qty=?, sdt=?, edt=? where name = ?"); 
-            ) {        
-            stmt.setString(1, team.getDescription());
-            stmt.setInt(2, team.getMaxQty());
-            stmt.setDate(3, team.getStartDate());
-            stmt.setDate(4, team.getEndDate());
-            stmt.setString(5, team.getName());
-                    
-            // Statement 객체를 사용하여 DBMS에 SQL문을 전송한다.
+            Connection con = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/java106db?serverTimezone=UTC&useSSL=false",
+                "java106", "1111");
+            PreparedStatement stmt = con.prepareStatement(
+                "insert into pms_team(name,dscrt,max_qty,sdt,edt) values(?,?,?,?,?)");) {
+            
+            stmt.setString(1, team.getName());
+            stmt.setString(2, team.getDescription());
+            stmt.setInt(3, team.getMaxQty());
+            stmt.setDate(4, team.getStartDate(), Calendar.getInstance(Locale.KOREAN));
+            stmt.setDate(5, team.getEndDate(), Calendar.getInstance(Locale.KOREAN));
             return stmt.executeUpdate();
         }
     }
-    
+
+    public int update(Team team) throws Exception {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        try (
+            Connection con = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/java106db?serverTimezone=UTC&useSSL=false",
+                "java106", "1111");
+            PreparedStatement stmt = con.prepareStatement(
+                "update pms_team set dscrt=?, max_qty=?, sdt=?, edt=? where name=?");) {
+            
+            stmt.setString(1, team.getDescription());
+            stmt.setInt(2, team.getMaxQty());
+            stmt.setDate(3, team.getStartDate(), Calendar.getInstance(Locale.KOREAN));
+            stmt.setDate(4, team.getEndDate(), Calendar.getInstance(Locale.KOREAN));
+            stmt.setString(5, team.getName());
+            return stmt.executeUpdate();
+        }
+    }
+
     public Team selectOne(String name) throws Exception {
         Class.forName("com.mysql.cj.jdbc.Driver");
         try (
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/java106db?serverTimezone=UTC&useSSL=false","java106", "1111");
-            PreparedStatement stmt = con.prepareStatement("select * from pms_team where name=?");) {
+            Connection con = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/java106db?serverTimezone=UTC&useSSL=false",
+                "java106", "1111");
+            PreparedStatement stmt = con.prepareStatement(
+                "select dscrt, sdt, edt, max_qty from pms_team where name=?");) {
             
-                stmt.setString(1, name);
+            stmt.setString(1, name);
+            
+            try (ResultSet rs = stmt.executeQuery();) {
+                if (!rs.next()) 
+                    return null;
                 
-                try (ResultSet rs = stmt.executeQuery();) {
-                    if (!rs.next()) 
-                        return null;
-                
-                    Team team = new Team();
-                    team.setName(name);
-                    team.setDescription(rs.getString("dscrt"));
-                    team.setMaxQty(rs.getInt("max_qty"));
-                    team.setStartDate(rs.getDate("sdt"));
-                    team.setEndDate(rs.getDate("edt"));
-                    
-                    return team;
+                Team team = new Team();
+                team.setName(name);
+                team.setDescription(rs.getString("dscrt"));
+                team.setStartDate(rs.getDate("sdt"));
+                team.setEndDate(rs.getDate("edt"));
+                team.setMaxQty(rs.getInt("max_qty"));
+                return team;
             }
-        }
-    }
+        }  
+    }    
 }
 
+//ver 31 - JDBC API 적용
 //ver 24 - File I/O 적용
 //ver 23 - @Component 애노테이션을 붙인다.
 //ver 22 - 추상 클래스 AbstractDao를 상속 받는다.

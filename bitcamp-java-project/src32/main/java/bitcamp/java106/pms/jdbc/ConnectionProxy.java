@@ -1,3 +1,4 @@
+// 실제 커넥션 객체를 대행하는 역할을 수행한다.
 package bitcamp.java106.pms.jdbc;
 
 import java.sql.Array;
@@ -19,9 +20,11 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
+// proxy를 만든 이유?
+// => close()를 호출할 때 DB 연결을 끊는 대신,
+//    DataSource에 커넥션을 반납하기 위해!
 public class ConnectionProxy implements Connection {
-    
-    DataSource dataSource; // con을 반환하기위한 목적으로만 사용되는 듯.
+    DataSource dataSource;
     Connection con;
     
     public ConnectionProxy(DataSource dataSource, Connection con) {
@@ -71,7 +74,7 @@ public class ConnectionProxy implements Connection {
 
     public void close() throws SQLException {
         dataSource.returnConnection(this);
-    }// close가 아닌 해당 객체를 반환시킨다.
+    }
 
     public boolean isClosed() throws SQLException {
         return con.isClosed();
@@ -248,6 +251,16 @@ public class ConnectionProxy implements Connection {
     public int getNetworkTimeout() throws SQLException {
         return con.getNetworkTimeout();
     }
-
-
+  
+    
 }
+
+
+
+
+
+
+
+
+
+

@@ -18,87 +18,53 @@ public class Task implements Serializable {
     private Member worker;
     private Team team;
     
-    public Task(Team team) {
-        this.team = team;
-    }
-    
-    public Task(Team team, String title, Date startDate, Date endDate) {
-        this(team);
-        this.title = title;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.state = READY;
-    }
-    
-    public Task() { }
-
     public int getNo() {
         return no;
     }
-    
     public Task setNo(int no) {
         this.no = no;
         return this;
     }
-    
     public int getState() {
         return state;
     }
-    
     public Task setState(int state) {
         this.state = state;
-        
         return this;
     }
-    
     public Member getWorker() {
         return worker;
     }
-    
     public Task setWorker(Member worker) {
         this.worker = worker;
-        
         return this;
-
     }
-    
     public Team getTeam() {
         return team;
     }
-    
     public Task setTeam(Team team) {
         this.team = team;
-        
         return this;
     }
-    
     public String getTitle() {
         return title;
     }
-    
     public Task setTitle(String title) {
         this.title = title;
-        
         return this;
     }
-    
     public Date getStartDate() {
         return startDate;
     }
-    
     public Task setStartDate(Date startDate) {
         this.startDate = startDate;
-        
         return this;
     }
-    
     public Date getEndDate() {
         return endDate;
     }
-    
     public Task setEndDate(Date endDate) {
         this.endDate = endDate;
-        
         return this;
     }
 

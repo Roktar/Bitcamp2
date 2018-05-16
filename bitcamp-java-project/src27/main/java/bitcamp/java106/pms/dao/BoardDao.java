@@ -4,66 +4,70 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
-import java.sql.Date;
 import java.util.Iterator;
-import java.util.Scanner;
 
 import bitcamp.java106.pms.annotation.Component;
 import bitcamp.java106.pms.domain.Board;
 
 @Component
-public class BoardDao extends AbstractDAO<Board>{
-
-    public BoardDao()  throws Exception {
-        this.load();
+public class BoardDao extends AbstractDao<Board> {
+    
+    public BoardDao() throws Exception {
+        load();
     }
-        
+    
     public void load() throws Exception {
-        try(ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(new FileInputStream("data/board.data")));) {
-            while( true ) {
+        try (
+                ObjectInputStream in = new ObjectInputStream(
+                               new BufferedInputStream(
+                               new FileInputStream("data/board.data")));
+            ) {
+        
+            while (true) {
                 try {
                     this.insert((Board) in.readObject());
-                } catch (Exception e) { 
-                    break;
+                } catch (Exception e) { // 데이터를 모두 읽었거나 파일 형식에 문제가 있다면,
+                    //e.printStackTrace();
+                    break; // 반복문을 나간다.
                 }
             }
-        } catch(Exception e) {
-            System.out.println("로딩 에러 : " + e.getMessage());
         }
     }
     
-    public void save() throws Exception {        
-        Iterator<Board> boards = this.list();
-        
-        // List에 보관된 데이터를 board.csv 파일에 저장한다.
-        // 기존에 저장된 데이터를 덮어쓴다. 즉 처음부터 다시 저장한다.
-        try( ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream("data/board.data")));) {
-            while (boards.hasNext()) 
+    public void save() throws Exception {
+        try (
+                ObjectOutputStream out = new ObjectOutputStream(
+                                new BufferedOutputStream(
+                                new FileOutputStream("data/board.data")));
+            ) {
+            Iterator<Board> boards = this.list();
+            
+            while (boards.hasNext()) {
                 out.writeObject(boards.next());
-        } // 예외가 발생하면 메소드단에서 예외를 던진다. 
-          // 호출하는 클래스단(App)에서 예외를 받기때문에 처리는 거기서 하면된다.
+            }
+        } 
     }
-
-    public int getIndex(Object key) { // 부모클래스에 선언된 리스트를 돌아보며 값을 찾는다.
-        int no = (int) key; // board는 글번호(int)로 검색한다.
-        
-        for(int i=0; i<collection.size(); i++) {
-            if( collection.get(i).getNo() == no )
+    
+    public int indexOf(Object key) {
+        int no = (Integer) key; // Integer ==> int : auto-unboxing
+        for (int i = 0; i < collection.size(); i++) {
+            Board originBoard = collection.get(i);
+            if (originBoard.getNo() == no) {
                 return i;
+            }
         }
         return -1;
     }
 }
 
-// ver 24 - 데이터 로드 & 세이브
-// ver 23 - @Component Annotation 추가
-// ver 22 - 추상클래스 상속
-// ver 19 - 컬렉션 클래스 및 제네릭 적용
+//ver 24 - File I/O 적용
+//ver 23 - @Component 애노테이션을 붙인다.
+//ver 22 - 추상 클래스 AbstractDao를 상속 받는다.
+//ver 19 - 우리 만든 ArrayList 대신 java.util.LinkedList를 사용하여 목록을 다룬다. 
+//ver 18 - ArrayList를 이용하여 인스턴스(의 주소) 목록을 다룬다. 
+// ver 16 - 인스턴스 변수를 직접 사용하는 대신 겟터, 셋터 사용.
 // ver 14 - BoardController로부터 데이터 관리 기능을 분리하여 BoardDao 생성.
 
 

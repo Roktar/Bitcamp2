@@ -39,32 +39,26 @@ public class TeamMemberAddController implements Controller {
                 out.printf("%s 팀은 존재하지 않습니다.\n", teamName);
                 return;
             }
-            
             Member member = memberDao.selectOne(memberId);
             if (member == null) {
                 out.printf("%s 회원은 없습니다.\n", memberId);
                 return;
             }
-            
             if (teamMemberDao.isExist(teamName, memberId)) {
                 out.println("이미 등록된 회원입니다.");
                 return;
             }
-        } catch(Exception e) {
-            out.println("검색실패");
-            e.printStackTrace(out);
-        }
-            
-        try {
             teamMemberDao.insert(teamName, memberId);
             out.println("팀에 회원을 추가하였습니다.");
-        } catch(Exception e) {
-            out.println("등록 실패");
+            
+        } catch (Exception e) {
+            out.println("등록 실패!");
             e.printStackTrace(out);
         }
     }
 }
 
+//ver 31 - JDBC API가 적용된 DAO 사용
 //ver 28 - 네트워크 버전으로 변경
 //ver 26 - TeamMemberController에서 add() 메서드를 추출하여 클래스로 정의.
 //ver 23 - @Component 애노테이션을 붙인다.

@@ -1,24 +1,22 @@
+// Controller 규칙에 따라 메서드 작성
 package bitcamp.java106.pms.controller.classroom;
 
 import java.sql.Date;
-import java.util.Iterator;
 import java.util.Scanner;
 
 import bitcamp.java106.pms.annotation.Component;
 import bitcamp.java106.pms.controller.Controller;
-import bitcamp.java106.pms.dao.ClassDao;
+import bitcamp.java106.pms.dao.ClassroomDao;
 import bitcamp.java106.pms.domain.Classroom;
-import bitcamp.java106.pms.util.Console;
 
-@Component(value="classroom/Add")
+@Component("classroom/add")
 public class ClassroomAddController implements Controller {
     Scanner keyScan;
-
-    ClassDao classDao;
+    ClassroomDao classroomDao;
     
-    public ClassroomAddController(Scanner scanner, ClassDao classDao) {
+    public ClassroomAddController(Scanner scanner, ClassroomDao classroomDao) {
         this.keyScan = scanner;
-        this.classDao = classDao;
+        this.classroomDao = classroomDao;
     }
     
     public void service(String menu, String option) {
@@ -29,18 +27,16 @@ public class ClassroomAddController implements Controller {
         classroom.setTitle(this.keyScan.nextLine());
 
         System.out.print("시작일? ");
-        classroom.setStartDate( Date.valueOf(this.keyScan.nextLine()) );
+        classroom.setStartDate(Date.valueOf(this.keyScan.nextLine()));
 
         System.out.print("종료일? ");
-        classroom.setEndDate( Date.valueOf(this.keyScan.nextLine()) );
-        
-        System.out.print("교실 번호? ");
-        classroom.setPlace(this.keyScan.nextLine());
+        classroom.setEndDate(Date.valueOf(this.keyScan.nextLine()));
 
-        System.out.println("등록되었습니다.");
-        classDao.insert(classroom);
+        System.out.print("교실명? ");
+        classroom.setRoom(this.keyScan.nextLine());
+        
+        classroomDao.insert(classroom);
     }
 }
 
-// ver 14 - BoardDao를 사용하여 게시물 데이터를 관리한다.
-// ver 13 - 게시물 등록할 때 등록일의 문자열을 Date 객체로 만들어 저장.
+//ver 26 - ClassroomController에서 add() 메서드를 추출하여 클래스로 정의.

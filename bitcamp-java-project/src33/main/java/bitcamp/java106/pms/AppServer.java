@@ -1,19 +1,48 @@
 // App을 서버로 만들기
 package bitcamp.java106.pms;
 
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.Scanner;
+
+import bitcamp.java106.pms.context.ApplicationContext;
+import bitcamp.java106.pms.controller.Controller;
+import bitcamp.java106.pms.dao.BoardDao;
+import bitcamp.java106.pms.dao.ClassroomDao;
+import bitcamp.java106.pms.dao.MemberDao;
+import bitcamp.java106.pms.dao.TaskDao;
+import bitcamp.java106.pms.dao.TeamDao;
+import bitcamp.java106.pms.dao.TeamMemberDao;
+import bitcamp.java106.pms.server.ServerRequest;
+import bitcamp.java106.pms.server.ServerResponse;
+
 public class AppServer {
-    HttpServer httpServer;
-    ApplicationContainer aContainer;
     
-    public AppServer(int port) throws Exception {        
-        // 클라이언트 요청을 처리할 객체 준비
-        aContainer = new DefaultApplicationContainer();
+    HTTPServer httpServer;
+    ApplicationContainer applicationContainer;
+    
+    public AppServer(int port) throws Exception {
+        // 서버에서 작업하는데 필요한 객체를 준비한다.
+        // => 클라이언트 요청을 처리할 객체를 준비한다.
+        applicationContainer = new DefaultApplicationContainer();
         
-        // 웹 서버 준비
-        httpServer = new HttpServer(port, aContainer);
+        // => 웹 서버를 준비한다.
+        httpServer = new HTTPServer(port, applicationContainer);
     }
     
-/*    void onQuit() {
+    void service() throws Exception {
+        httpServer.execute();
+    }
+    
+    public static void main(String[] args) throws Exception {
+        AppServer appServer = new AppServer(8888);
+        appServer.service();
+    }
+    
+    /*
+    void onQuit() {
         System.out.println("안녕히 가세요!");
         BoardDao boardDao = (BoardDao) iocContainer.getBean(BoardDao.class);
         ClassroomDao classroomDao = (ClassroomDao) iocContainer.getBean(ClassroomDao.class);
@@ -41,17 +70,16 @@ public class AppServer {
         
         try {teamMemberDao.save();} 
         catch (Exception e) { System.out.println("팀멤버 데이터 저장 중 오류 발생!");}
-    }*/
+    }
+     */
 
-    void service() throws Exception {
-        httpServer.execute();
-    }
-        
-    public static void main(String[] args) throws Exception {
-        AppServer appServer = new AppServer(8888);
-        appServer.service();
-    }
 }
 
-//ver 29 - 웹서버와 어플리케이션 실행기능을 별도 클래스로 분리
+//ver 29 - 웹서버와 애플리케이션 실행 기능을 별도의 클래스로 분리한다.
 //ver 28 - 서버 만들기
+
+
+
+
+
+

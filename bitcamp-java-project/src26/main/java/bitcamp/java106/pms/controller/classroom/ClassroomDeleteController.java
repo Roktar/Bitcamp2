@@ -1,46 +1,47 @@
+// Controller 규칙에 따라 메서드 작성
 package bitcamp.java106.pms.controller.classroom;
 
-import java.sql.Date;
-import java.util.Iterator;
 import java.util.Scanner;
 
 import bitcamp.java106.pms.annotation.Component;
 import bitcamp.java106.pms.controller.Controller;
-import bitcamp.java106.pms.dao.ClassDao;
+import bitcamp.java106.pms.dao.ClassroomDao;
 import bitcamp.java106.pms.domain.Classroom;
 import bitcamp.java106.pms.util.Console;
 
-@Component(value="classroom/delete")
+@Component("classroom/delete")
 public class ClassroomDeleteController implements Controller {
     Scanner keyScan;
-
-    ClassDao classDao;
+    ClassroomDao classroomDao;
     
-    public ClassroomDeleteController(Scanner scanner, ClassDao classDao) {
+    public ClassroomDeleteController(Scanner scanner, ClassroomDao classroomDao) {
         this.keyScan = scanner;
-        this.classDao = classDao;
+        this.classroomDao = classroomDao;
     }
     
     public void service(String menu, String option) {
-        System.out.println("[수업 삭제]");
+        System.out.println("[수업 정보 삭제]");
+
+        System.out.print("삭제할 수업 번호? ");
+        String str = keyScan.nextLine();
+        if (str.length() == 0) {
+            System.out.println("번호를 입력하시기 바랍니다.");
+            return;
+        }
         
-        Classroom classroom = classDao.get( inputNo() );
+        int i = Integer.parseInt(str);
+        Classroom classroom = classroomDao.get(i);
         
         if (classroom == null) {
             System.out.println("유효하지 않은 게시물 번호입니다.");
         } else {
             if (Console.confirm("정말 삭제하시겠습니까?")) {
-                int idx = classDao.getIndex(classroom.getNo());
-                
-                if(idx < 0)
-                    return;
-                classDao.delete(idx);
+                classroomDao.delete(i);
                 System.out.println("삭제하였습니다.");
-            } else
-                System.out.println("취소하였습니다.");
+            }
         }
     }
+
 }
 
-// ver 14 - BoardDao를 사용하여 게시물 데이터를 관리한다.
-// ver 13 - 게시물 등록할 때 등록일의 문자열을 Date 객체로 만들어 저장.
+//ver 26 - ClassroomController에서 delete() 메서드를 추출하여 클래스로 정의.

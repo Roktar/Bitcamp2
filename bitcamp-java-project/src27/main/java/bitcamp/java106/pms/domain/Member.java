@@ -1,14 +1,15 @@
 package bitcamp.java106.pms.domain;
 
-public class Member implements java.io.Serializable {
-    public static final long serialVersionUID = 1L;
+import java.io.Serializable;
+
+public class Member implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private String id;
     private String email;
     private String password;
     
-    public Member() {
-        
-    }
+    public Member() {}
     
     public Member(String id) {
         this.id = id;
@@ -32,8 +33,16 @@ public class Member implements java.io.Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
+    
     @Override
     public String toString() {
-        return "Member [id=" + id + ", email=" + email + "]";
+        return "Member [id=" + id + ", email=" + email + ", password=" + password + "]";
     }
+    
+    
 }
+
+//ver 27 - java.io.Serializable 인터페이스 구현
+//ver 24 - 생성자 추가
+//ver 17 - toString() 재정의.
+//ver 16 - 캡슐화 적용. 겟터, 셋터 추가.

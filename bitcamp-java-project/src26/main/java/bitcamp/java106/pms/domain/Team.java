@@ -2,27 +2,23 @@ package bitcamp.java106.pms.domain;
 
 import java.sql.Date;
 
-// 팀 정보를 저장할 수 있는 메모리의 구조를 설계한 클래스
+// Team 클래스
+// => 팀 정보를 저장할 수 있는 메모리를 구조를 설계한 클래스이다.
+// => 즉 팀 정보를 위해 사용자(자바 언어 사용자. 즉 개발자)가 새로 정의한 데이터 타입이다.
+//
 public class Team {
     private String name;
     private String description;
     private int maxQty;
     private Date startDate;
     private Date endDate;
-    
-    public Team() {
-        
-    }
+
+    public Team() {}
     
     public Team(String name) {
         this.name = name;
     }
-
-    // 사용자 정의 데이터 타입에서의 메서드 정의
-    // => 새 데이터 타입의 값을 다룰 연산자를 정의하는 것을 의미
-    // ==> 여기서는 데이터를 실제로 다룰 메소드를 정의하는 것이 아닌 데이터간의 연산을 다룰 메소드를 정의한다./
-    // 연산자는 외부에서 사용하기때문에 public.
-        
+    
     public String getName() {
         return name;
     }
@@ -67,14 +63,12 @@ public class Team {
     public String toString() {
         return "Team [name=" + name + ", startDate=" + startDate + ", endDate=" + endDate + "]";
     }
-
-    public String[] getMembers() {
-        // TODO Auto-generated method stub
-        return null;
-    }
 }
 
-// ver 17 - getMember 메소드 추가
-// ver 15 - 멤버를 저장할 인스턴스 변수를 추가한다.
-//          연산자 재정의
-// ver 13 - 시작일, 종료일의 데이터 타입을 String에서 Date으로 변경
+//ver 24 - 생성자 추가
+//ver 17 - toString() 오버라이딩.
+//         팀 멤버 관련 메서드를 TeamMemberDao 클래스로 옮긴다.
+//ver 16 - 캡슐화 적용. 겟터, 셋터 추가.
+//ver 15 - 멤버를 저장할 인스턴스 변수를 추가한다.
+//          팀 멤버 배열에 멤버 객체를 추가하고 빼는 메서드를 새로 정의한다.
+//ver 13 - 시작일, 종료일의 데이터 타입을 String에서 Date으로 변경

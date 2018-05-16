@@ -3,27 +3,35 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<!-- 다음과 같이 DAO 클래스 이름과 같게하면 유지보수할 때 알아보기가 쉬워진다. -->
-<!-- 알아보기가 쉬운 것뿐만이 아니라 스프링과 연동할 때 DAO 객체를 자동 생성이 가능하다. -->
-
 <mapper namespace="bitcamp.java106.pms.dao.TeamMemberDao">
-  <!-- SQL문 id를 설정할 때 SQL문을 사용하는 함수 이름과 같게하면 유지보수할 때 알아보기 쉽다. -->
-  <!-- 알아보기쉬운 것 뿐만이 아니라 스프링과 연동할 때 DAO를 자동 생성하고 메소드를 자동생성할 때 사용할 수 있다. -->
-  <select id="selectList"  resultType="String" parameterType="String">
-    select mid from pms_team_member where tnm=#{teamName} <!-- limit #{startIndex}, #{pageSize} -->
+  
+  <select id="selectList" 
+          resultType="string" parameterType="string">
+    select mid from pms_team_member 
+    where tnm=#{value}
+    <!--  limit #{startIndex}, #{pageSize} -->
   </select>
   
-   <select id="isExist" parameterType="map" resultType="int">
+  <insert id="insert" parameterType="map">
+    insert into pms_team_member(tnm,mid) 
+    values(#{teamName},#{memberId})
+  </insert>
+  
+  <select id="isExist" parameterType="map" resultType="int">
     select count(*) 
     from pms_team_member 
     where tnm=#{teamName} and mid=#{memberId}
   </select>
   
-  <insert id="insert" parameterType="map">
-    insert into pms_team_member values( #{teamName}, #{memberId} );
-  </insert>
-  
   <delete id="delete" parameterType="map">
-    delete from pms_team_member where tnm = #{teamName} and mid = #{memberId}
+    delete from pms_team_member 
+    where tnm=#{teamName} and mid=#{memberId}
   </delete>
 </mapper>
+
+
+
+
+
+
+

@@ -1,8 +1,7 @@
-// 팀 작업 관리 기능을 모아 둔 클래스
+// Controller 규칙에 따라 메서드 작성
 package bitcamp.java106.pms.controller.task;
 
 import java.sql.Date;
-import java.util.Iterator;
 import java.util.Scanner;
 
 import bitcamp.java106.pms.annotation.Component;
@@ -15,7 +14,7 @@ import bitcamp.java106.pms.domain.Task;
 import bitcamp.java106.pms.domain.Team;
 import bitcamp.java106.pms.util.Console;
 
-@Component(value="task/update")
+@Component("task/update")
 public class TaskUpdateController implements Controller {
     
     Scanner keyScan;
@@ -25,7 +24,7 @@ public class TaskUpdateController implements Controller {
     TeamMemberDao teamMemberDao;
     
     public TaskUpdateController(Scanner scanner, TeamDao teamDao, 
-                          MemberDao memberDao, TaskDao taskDao, TeamMemberDao teamMemberDao) {
+            TaskDao taskDao, TeamMemberDao teamMemberDao, MemberDao memberDao) {
         this.keyScan = scanner;
         this.teamDao = teamDao;
         this.taskDao = taskDao;
@@ -34,10 +33,6 @@ public class TaskUpdateController implements Controller {
     }
     
     public void service(String menu, String option) {
-        System.out.println("[팀 작업 변경]");
-        System.out.print("변경할 작업의 번호? ");
-        int taskNo = Integer.parseInt(keyScan.nextLine());
-        
         if (option == null) {
             System.out.println("팀명을 입력하시기 바랍니다.");
             return; 
@@ -48,6 +43,10 @@ public class TaskUpdateController implements Controller {
             System.out.printf("'%s' 팀은 존재하지 않습니다.", option);
             return;
         }
+        
+        System.out.println("[팀 작업 변경]");
+        System.out.print("변경할 작업의 번호? ");
+        int taskNo = Integer.parseInt(keyScan.nextLine());
         
         Task originTask = taskDao.get(taskNo);
         if (originTask == null) {
@@ -106,17 +105,19 @@ public class TaskUpdateController implements Controller {
             }
         }
         
-        int index = taskDao.getIndex(taskNo);
-        
         if (Console.confirm("변경하시겠습니까?")) {
-            if(taskNo >= 0) {
-                taskDao.update(index, task);
-                System.out.println("변경하였습니다.");
-            }
+            int index = taskDao.indexOf(task.getNo());
+            taskDao.update(index, task);
+            System.out.println("변경하였습니다.");
         } else {
             System.out.println("취소하였습니다.");
         }
     }
+
 }
 
+//ver 26 - TaskController에서 update() 메서드를 추출하여 클래스로 정의.
+//ver 23 - @Component 애노테이션을 붙인다.
+//ver 22 - TaskDao 변경 사항에 맞춰 이 클래스를 변경한다.
+//ver 18 - ArrayList가 적용된 TaskDao를 사용한다.
 //ver 17 - 클래스 생성

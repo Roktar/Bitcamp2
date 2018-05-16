@@ -1,10 +1,12 @@
 # 변경 내역
-- build.gradle 내용 추가
+- build.gradle 변경
 - eclipse 설정 파일 갱신
 - pms_board 테이블 생성
 ```
-CREATE TABLE pms_board(
-    bno integer not null,
+drop table pms_board;
+
+create table pms_board (
+    bno int not null,
     titl varchar(255) not null,
     cont text,
     cdt datetime not null
@@ -14,13 +16,16 @@ alter table pms_board
     add constraint pms_board_pk primary key (bno);
 
 alter table pms_board
-    modify column bno int not null auto_increment;
+    modify column bno int not null auto_increment;   
 ```
-- boardController 변경
-
+- Board.java 변경
+- BoardDao.java 변경
+- BoardXxxController.java 변경
 - pms_member 테이블 생성
 ```
-CREATE TABLE pms_member(
+drop table pms_member;
+
+create table pms_member (
     mid varchar(20) not null,
     email varchar(255) not null,
     pwd varchar(100) not null
@@ -28,14 +33,15 @@ CREATE TABLE pms_member(
 
 alter table pms_member
     add constraint pms_member_pk primary key (mid);
-    
 ```
-
-- member.java에서 생성자 제거
-
+- Member.java 변경 
+- MemberDao.java 변경
+- MemberXxxController.java 변경
 - pms_classroom 테이블 생성
 ```
-CREATE TABLE pms_classroom(
+drop table pms_classroom;
+
+create table pms_classroom (
     crno int not null,
     titl varchar(255) not null,
     sdt datetime not null,
@@ -43,17 +49,20 @@ CREATE TABLE pms_classroom(
     room varchar(50)
 );
 
-alter table pms_classroom 
-    add constraint pms_classroom_pk primary key(crno);
+alter table pms_classroom
+    add constraint pms_classroom_pk primary key (crno);
     
-alter table pms_classroom 
+alter table pms_classroom
     modify column crno int not null auto_increment;
-
 ```
-
-- pms_team테이블 생성
+- Classroom.java 변경
+- ClassroomDao.java 변경
+- ClassroomXxxController.java 변경
+- pms_team 테이블 생성
 ```
-CREATE TABLE pms_team(
+drop table pms_team;
+
+create table pms_team (
     name varchar(100) not null,
     dscrt text,
     max_qty int not null,
@@ -62,13 +71,16 @@ CREATE TABLE pms_team(
 );
 
 alter table pms_team
-    add constraint pms_team_pk primary key(name);
-
+    add constraint pms_team_pk primary key (name);
 ```
-
-- pms_task테이블 생성
+- Team.java 변경
+- TeamDao.java 변경
+- TeamXxxController.java 변경
+- pms_task 테이블 생성
 ```
-CREATE TABLE pms_task(
+drop table pms_task;
+
+create table pms_task (
     tano int not null,
     titl varchar(255) not null,
     sdt datetime not null,
@@ -79,24 +91,33 @@ CREATE TABLE pms_task(
 );
 
 alter table pms_task
-    add constraint pms_task_pk primary key(tano);
+    add constraint pms_task_pk primary key (tano);
 
 alter table pms_task
     modify column tano int not null auto_increment;
-
-alter table pms_task
-    add constraint pms_task_fk1 foreign key(mid) references pms_member(mid);
-
 ```
-
-- pms_teammember테이블 생성
+- Task.java 변경
+- TaskDao.java 변경
+- TaskXxxController.java 변경
+- pms_team_member 테이블 생성
 ```
-CREATE TABLE pms_team_member(
+drop table pms_team_member;
+
+create table pms_team_member (
     tnm varchar(100) not null,
     mid varchar(20) not null
 );
 
 alter table pms_team_member
-    add constraint pms_team_member_pk primary key(tnm, mid);
-
+    add constraint pms_team_member_pk primary key (tnm, mid);
 ```
+- AbstractDao.java 삭제
+
+
+
+
+
+
+
+
+

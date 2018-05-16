@@ -18,27 +18,29 @@ public class TeamDeleteController implements Controller {
     public TeamDeleteController(TeamDao teamDao) {
         this.teamDao = teamDao;
     }
-    
+
     @Override
     public void service(ServerRequest request, ServerResponse response) {
         PrintWriter out = response.getWriter();
         String name = request.getParameter("name");
-
+        
         try {
             int count = teamDao.delete(name);
-            
-            if(count == 0)
-                out.println("해당 회원이 없습니다.");
-            else
+    
+            if (count == 0) {
+                out.println("해당 이름의 팀이 없습니다.");
+            } else {
                 out.println("삭제하였습니다.");
-        } catch(Exception e) {
-            out.println("삭제 실패");
+            }
+        } catch (Exception e) {
+            out.println("삭제 실패!");
             e.printStackTrace(out);
         }
     }
     
 }
 
+//ver 31 - JDBC API가 적용된 DAO 사용
 //ver 28 - 네트워크 버전으로 변경
 //ver 26 - TeamController에서 delete() 메서드를 추출하여 클래스로 정의.
 //ver 23 - @Component 애노테이션을 붙인다.

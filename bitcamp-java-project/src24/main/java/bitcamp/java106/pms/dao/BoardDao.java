@@ -11,38 +11,34 @@ import bitcamp.java106.pms.annotation.Component;
 import bitcamp.java106.pms.domain.Board;
 
 @Component
-public class BoardDao extends AbstractDAO<Board>{
+public class BoardDao extends AbstractDao<Board> {
     
     public BoardDao() throws Exception {
-        this.load();
+        load();
     }
     
     public void load() throws Exception {
-        // 한줄씩 읽어들이는 게 없기때문에 스캐너를 통해 한줄씩 처리
         Scanner in = new Scanner(new FileReader("data/board.csv"));
-
-        while( true ) {
+        while (true) {
+            // 저장된 데이터를 한 줄 읽는다.
+            // 한 줄에 한 개의 게시물 데이터가 있다.
+            // 데이터 형식은 다음과 같다.
+            // "번호,제목,내용,등록일"
+            //
             try {
-                String line = in.nextLine();
-                System.out.println(line);
-                String[] arr = line.split(",");
+                String[] arr = in.nextLine().split(",");
                 Board board = new Board();
-                board.setNo( Integer.parseInt(arr[0]) );
+                board.setNo(Integer.parseInt(arr[0]));
                 board.setTitle(arr[1]);
                 board.setContent(arr[2]);
                 board.setCreatedDate(Date.valueOf(arr[3]));
-                insert(board);
-            } catch (Exception e) { 
-                System.out.println("에러 : " + e.getMessage());
-                break;
-                // 1) 데이터를 다 읽었을 때
-                // 2) 파일 형식에 문제 있을 때
+                this.insert(board);
+            } catch (Exception e) { // 데이터를 모두 읽었거나 파일 형식에 문제가 있다면,
+                //e.printStackTrace();
+                break; // 반복문을 나간다.
             }
         }
         in.close();
-        // 저장된 데이터를 한 줄씩 읽는다.
-        // 한 줄에 한 개의 게시물 데이터를 갖는다.
-        // 형식 : 번호, 제목, 내용, 등록일
     }
     
     public void save() throws Exception {
@@ -55,26 +51,29 @@ public class BoardDao extends AbstractDAO<Board>{
         while (boards.hasNext()) {
             Board board = boards.next();
             out.printf("%d,%s,%s,%s\n", board.getNo(), board.getTitle(),
-                        board.getContent(), board.getCreatedDate());
+                    board.getContent(), board.getCreatedDate());
         }
         out.close();
     }
-
-    public int getIndex(Object key) { // 부모클래스에 선언된 리스트를 돌아보며 값을 찾는다.
-        int no = (int) key; // board는 글번호(int)로 검색한다.
-        
-        for(int i=0; i<data.size(); i++) {
-            if( data.get(i).getNo() == no )
+    
+    public int indexOf(Object key) {
+        int no = (Integer) key; // Integer ==> int : auto-unboxing
+        for (int i = 0; i < collection.size(); i++) {
+            Board originBoard = collection.get(i);
+            if (originBoard.getNo() == no) {
                 return i;
+            }
         }
         return -1;
     }
 }
 
-// ver 24 - 데이터 로드 & 세이브
-// ver 23 - @Component Annotation 추가
-// ver 22 - 추상클래스 상속
-// ver 19 - 컬렉션 클래스 및 제네릭 적용
+//ver 24 - File I/O 적용
+//ver 23 - @Component 애노테이션을 붙인다.
+//ver 22 - 추상 클래스 AbstractDao를 상속 받는다.
+//ver 19 - 우리 만든 ArrayList 대신 java.util.LinkedList를 사용하여 목록을 다룬다. 
+//ver 18 - ArrayList를 이용하여 인스턴스(의 주소) 목록을 다룬다. 
+// ver 16 - 인스턴스 변수를 직접 사용하는 대신 겟터, 셋터 사용.
 // ver 14 - BoardController로부터 데이터 관리 기능을 분리하여 BoardDao 생성.
 
 
