@@ -9,13 +9,11 @@ public class Test {
         // 그 API를 적용하기 전에 간단한 예제를 만들어 동작을 확인하라!
         String str = "/board/add?title=aaaa&content=bbb";
         System.out.println("dddd");
-          
+        System.out.println("dd");
         ServerRequest request = new ServerRequest(str);
-         
         System.out.println(request.getServerPath());
         System.out.println(request.getParameter("title"));
         System.out.println(request.getParameter("content"));
         System.out.println(request.getParameter("age"));
-        System.out.println("장하은 바보"); 
     }
 }
