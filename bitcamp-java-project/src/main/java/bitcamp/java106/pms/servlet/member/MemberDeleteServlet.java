@@ -41,7 +41,7 @@ public class MemberDeleteServlet extends HttpServlet {
         out.println("</head>");
         out.println("<body>");
         out.println("<h1>회원 삭제 결과</h1>");
-        
+         
         try {
             int count = memberDao.delete(id);
     
