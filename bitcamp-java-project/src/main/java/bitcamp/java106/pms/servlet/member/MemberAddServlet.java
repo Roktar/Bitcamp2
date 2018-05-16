@@ -20,7 +20,7 @@ import bitcamp.java106.pms.servlet.InitServlet;
 
 @SuppressWarnings("serial")
 @Component("/member/add")
-public class MemberAddController extends HttpServlet {
+public class MemberAddServlet extends HttpServlet {
 
     MemberDao memberDao;
     
