@@ -45,22 +45,22 @@ public class ClassroomListServlet extends HttpServlet {
             out.println("<p><a href='form.html'>새 강의실</a></p>");
             out.println("<table border='1'>");
             out.println("<tr>");
-            out.println("    <th>번호</th><th>제목</th><th>시작일</th><th>종료일</th><th>강의실</th><th>삭제</th><th>변경</th>");
+            out.println("    <th>번호</th><th>제목</th><th>시작일</th><th>종료일</th><th>강의실</th><th colspan=2>작업</th>");
             out.println("</tr>");
             for (Classroom classroom : list) {
             	out.println("<tr>");
-            	out.println("<form action='delete' method='get'>");
-                out.printf("<td><input type='text' name='no' value='%d' readonly></td><td><input type='text' name='title' value='%s'/></td><td>"
+            	out.println("<form action='update' method='post'>");
+                out.printf("<td><input type='text' name='no' value='%d' size='3' style='text-align:center'readonly></td><td><input type='text' name='title' value='%s'/></td><td>"
                 		+ "<input type='text' name='startDate' value='%s'/></td>"
                 		+ "<td><input type='text' name='endDate' value='%s'/></td><td>"
                 		+ "<input type='text' name='room' value='%s'/></td>"
-                		+ "<td> <button>삭제</button> </td>", 
+                		+ "<td> <button>변경</button> </td>", 
                 		classroom.getNo(), classroom.getTitle(), 
                         classroom.getStartDate(), classroom.getEndDate(),
                         classroom.getRoom(), classroom.getNo());
         		out.println("</form>");
-        		out.printf("<form action='update' method='post'>"
-                		+ "<td> <button> 변경 </button> </td>\n",
+        		out.printf("<form action='delete' method='get'>"
+                		+ "<td> <button>삭제</button> </td>\n",
                 		classroom.getNo());
                 out.println("</form>");
                 out.println("</tr>");
