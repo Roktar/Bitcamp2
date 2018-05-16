@@ -49,11 +49,7 @@ public class BoardAddServlet extends HttpServlet {
         out.println("<html>");
         out.println("<head>");
         out.println("<meta charset='UTF-8'>");
-        
-        // 지정된 시간이 경과하면 특정 서블릿을 요청하도록 태그를 삽입!
-        // => 웹브라우저는 meta 태그의 내용대로 동작한다.
-        //    content='경과시간(초);url=요청할URL'
-        //
+
         out.println("<meta http-equiv='Refresh' content='1;url=list'>");
         
         out.println("<title>게시물 등록</title>");
