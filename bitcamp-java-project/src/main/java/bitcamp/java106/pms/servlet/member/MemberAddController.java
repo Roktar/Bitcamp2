@@ -1,5 +1,5 @@
 // Controller 규칙에 따라 메서드 작성
-package bitcamp.java106.pms.controller.member;
+package bitcamp.java106.pms.servlet.member;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,6 +18,7 @@ import bitcamp.java106.pms.server.ServerRequest;
 import bitcamp.java106.pms.server.ServerResponse;
 import bitcamp.java106.pms.servlet.InitServlet;
 
+@SuppressWarnings("serial")
 @Component("/member/add")
 public class MemberAddController extends HttpServlet {
 
