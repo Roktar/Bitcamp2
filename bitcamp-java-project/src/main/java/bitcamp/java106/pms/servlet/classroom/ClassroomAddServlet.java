@@ -60,7 +60,7 @@ protected void doPost(
         e.printStackTrace(out);
     }
     out.println("</body>");
-    out.println("</html>");
+    out.println("</html>"); 
 	}
 }
 //ver 31 - JDBC API가 적용된 DAO 사용
