@@ -70,7 +70,7 @@ public class TeamViewServlet extends HttpServlet {
 		out.println("<p>");
 		out.println("<a href='list'>목록</a>");
 		out.println("<button>변경</button>");
-		out.printf("<button><a href='delete?no=%s'>삭제</a>\n</button>\n", name);
+		out.printf("<button><a href='delete?name=%s'>삭제</a>\n</button>\n", name);
 		out.println("</p>"); 
 		out.println("</body>");
 		out.println("</html>");
