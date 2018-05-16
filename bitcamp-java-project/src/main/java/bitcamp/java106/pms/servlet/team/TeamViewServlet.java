@@ -57,7 +57,7 @@ public class TeamViewServlet extends HttpServlet {
             out.printf("    <td><input type='text' name='description' value='%s'></td></tr>\n",
                     team.getDescription());
             out.println("<tr><th>최대 인원</th>");
-            out.printf("    <td><input type='text' name='maxqty' value='%s'></td></tr>\n",
+            out.printf("    <td><input type='text' name='maxQty' value='%s'></td></tr>\n",
                     team.getMaxQty());
             out.println("<tr><th>기간</th>");
             out.printf("    <td><input type='text' name='startDate' value='%s'> ~ <input type='text' name='endDate' value='%s'></td></tr>\n",
@@ -76,9 +76,6 @@ public class TeamViewServlet extends HttpServlet {
         out.println("</html>");
     }
 }
-    
-
-    
 //ver 31 - JDBC API가 적용된 DAO 사용
 //ver 28 - 네트워크 버전으로 변경
 //ver 26 - TeamController에서 view() 메서드를 추출하여 클래스로 정의.
