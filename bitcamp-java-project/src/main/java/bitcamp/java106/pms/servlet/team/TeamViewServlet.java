@@ -74,7 +74,7 @@ public class TeamViewServlet extends HttpServlet {
         out.println("</p>");
         out.println("</body>");
         out.println("</html>");
-    }
+    } 
 }
 //ver 31 - JDBC API가 적용된 DAO 사용
 //ver 28 - 네트워크 버전으로 변경
