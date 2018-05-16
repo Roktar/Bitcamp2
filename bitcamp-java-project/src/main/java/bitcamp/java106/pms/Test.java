@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package bitcamp.java106.pms;
 
 import bitcamp.java106.pms.server.ServerRequest;
@@ -49,4 +48,3 @@ public class Test {
     }
 
 }
->>>>>>> branch 'master' of https://github.com/Roktar/Bitcamp2.git
