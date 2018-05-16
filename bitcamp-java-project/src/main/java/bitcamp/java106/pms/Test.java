@@ -10,10 +10,12 @@ public class Test {
         String str = "/board/add?title=aaaa&content=bbb";
         System.out.println("dddd");
         System.out.println("dd");
+        
         ServerRequest request = new ServerRequest(str);
         System.out.println(request.getServerPath());
         System.out.println(request.getParameter("title"));
         System.out.println(request.getParameter("content"));
         System.out.println(request.getParameter("age"));
+        System.out.println("장하은 바보"); 
     }
 }
