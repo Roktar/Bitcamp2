@@ -5,7 +5,7 @@ import java.sql.Date;
 
 public class Classroom implements Serializable {
     private static final long serialVersionUID = 1L;
-    
+
     private int no;
     private String title;
     private Date startDate;
@@ -52,5 +52,6 @@ public class Classroom implements Serializable {
     
 }
 
+//ver 31 - 생성자 제거 및 count 변수 제거
 //ver 27 - java.io.Serializable 인터페이스 구현
 //ver 24 - setNo() 변경 

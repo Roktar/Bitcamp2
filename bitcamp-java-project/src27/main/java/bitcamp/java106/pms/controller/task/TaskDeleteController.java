@@ -1,43 +1,31 @@
-// 팀 작업 관리 기능을 모아 둔 클래스
+// Controller 규칙에 따라 메서드 작성
 package bitcamp.java106.pms.controller.task;
 
-import java.sql.Date;
-import java.util.Iterator;
 import java.util.Scanner;
 
 import bitcamp.java106.pms.annotation.Component;
 import bitcamp.java106.pms.controller.Controller;
-import bitcamp.java106.pms.dao.MemberDao;
 import bitcamp.java106.pms.dao.TaskDao;
 import bitcamp.java106.pms.dao.TeamDao;
-import bitcamp.java106.pms.dao.TeamMemberDao;
 import bitcamp.java106.pms.domain.Task;
 import bitcamp.java106.pms.domain.Team;
 import bitcamp.java106.pms.util.Console;
 
-@Component(value="task/delete")
+@Component("task/delete")
 public class TaskDeleteController implements Controller {
     
     Scanner keyScan;
     TeamDao teamDao;
     TaskDao taskDao;
-    MemberDao memberDao;
-    TeamMemberDao teamMemberDao;
     
-    public TaskDeleteController(Scanner scanner, TeamDao teamDao, 
-                          MemberDao memberDao, TaskDao taskDao, TeamMemberDao teamMemberDao) {
+    public TaskDeleteController(Scanner scanner, 
+            TeamDao teamDao, TaskDao taskDao) {
         this.keyScan = scanner;
         this.teamDao = teamDao;
         this.taskDao = taskDao;
-        this.teamMemberDao = teamMemberDao;
-        this.memberDao = memberDao;
     }
     
-    public void service(String menu, String option)  {
-        System.out.println("[팀 작업 삭제]");
-        System.out.print("삭제할 작업의 번호? ");
-        int taskNo = Integer.parseInt(keyScan.nextLine());
-        
+    public void service(String menu, String option) {
         if (option == null) {
             System.out.println("팀명을 입력하시기 바랍니다.");
             return; 
@@ -48,6 +36,10 @@ public class TaskDeleteController implements Controller {
             System.out.printf("'%s' 팀은 존재하지 않습니다.", option);
             return;
         }
+        
+        System.out.println("[팀 작업 삭제]");
+        System.out.print("삭제할 작업의 번호? ");
+        int taskNo = Integer.parseInt(keyScan.nextLine());
         
         Task task = taskDao.get(taskNo);
         if (task == null) {
@@ -65,4 +57,8 @@ public class TaskDeleteController implements Controller {
     }
 }
 
+//ver 26 - TaskController에서 delete() 메서드를 추출하여 클래스로 정의.
+//ver 23 - @Component 애노테이션을 붙인다.
+//ver 22 - TaskDao 변경 사항에 맞춰 이 클래스를 변경한다.
+//ver 18 - ArrayList가 적용된 TaskDao를 사용한다.
 //ver 17 - 클래스 생성

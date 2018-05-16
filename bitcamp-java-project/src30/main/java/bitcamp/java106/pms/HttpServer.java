@@ -1,3 +1,4 @@
+// HTTP 프로토콜에 따라 요청을 처리할 서버
 package bitcamp.java106.pms;
 
 import java.io.PrintWriter;
@@ -5,87 +6,76 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
-import bitcamp.java106.pms.controller.Controller;
-import bitcamp.java106.pms.server.ServerRequest;
-import bitcamp.java106.pms.server.ServerResponse;
-
-// HTTP 프로토콜에 따라 요청을 처리할 서버
-
-public class HttpServer {
+public class HTTPServer {
     int port;
-    ApplicationContainer aContainer;
-
-    public HttpServer(int port, ApplicationContainer aContainer) {
+    ApplicationContainer applicationContainer;
+    
+    public HTTPServer(int port, ApplicationContainer applicationContainer) {
         this.port = port;
-        this.aContainer = aContainer;
+        this.applicationContainer = applicationContainer;
     }
- 
+    
     public void execute() throws Exception {
         ServerSocket serverSocket = new ServerSocket(this.port);
-        System.out.println("Server On");
-
+        System.out.println("서버가 시작됨!");
+        
         while (true) {
             Socket socket = serverSocket.accept();
             
-            System.out.println("요청 처리중");
-            new RequestProcessThread(socket).start(); 
+            // 클라이언트 요청을 처리할 코드를 기존의 실행흐름에서 분리하여 실행한다.
+            // 그리고 바로 새 스레드(실행흐름)의 실행을 시작시킨다.
+            new RequestProcessorThread(socket).start();
+            
+            // 그리고 기존의 실행은 위의 t 스레드와 상관없이 계속 진행한다.
         }
     }
-
-    // 기존 실행 흐름과 분리하여 동작할 쓰레드 생성
-    class RequestProcessThread extends Thread {
+    
+    // 기존의 실행 흐름과 분리하여 명령을 처리할 클래스
+    class RequestProcessorThread extends Thread {
         Socket socket;
-
-        public RequestProcessThread(Socket socket) {
+        
+        public RequestProcessorThread(Socket socket) {
             this.socket = socket;
         }
-
+        
+        // 기존의 실행 흐름에서 분기되어 독립적으로 실행할 코드를 이 메서드에 두어라!
         @Override
         public void run() {
             PrintWriter out = null;
             Scanner in = null;
-
+            
             try {
                 out = new PrintWriter(socket.getOutputStream());
                 in = new Scanner(socket.getInputStream());
-
-                // HTTP 프로토콜에서 요청 정보 추출
-                String line = null;
-                String requestURI = null;
+                
+                // HTTP 프로토콜에서 요청 정보를 읽는다. 
                 boolean firstLine = true;
-
+                String requestURI = null;
+                
                 while (true) {
-                    line = in.nextLine();
-
-                    //System.out.println(line);
-
-                    if (line.equals("")) // CRLF를 의미
+                    String line = in.nextLine();
+                    if (line.equals(""))
                         break;
-
-                    // 첫 줄에는 사용자의 명령이 들어있다.
-                    // 따라서 첫 줄이 분리되어 명령어를 꺼냈다면 다시 꺼낼 필요가 없다.
-                    if (!firstLine)
+                    
+                    if (!firstLine) 
                         continue;
-
-                    // 도메인(서버주소)과 분리하고 그 뒷부분을 기준으로 처리한다.
-                    // 그 분리는 아마 요청 도중에 자동으로 분리되는 듯.
-                    // 단, 도중에 데이터 전송 방식과 HTTP/1.1이 붙음.
-                    // split()[0] : 데이터 전송 방식(GET/POST)
-                    // split()[1] : 사용자가 요청한 명령(페이지)
-                    // split()[2] : HTTP/1.1, HTTP 방식으로 요청했다는 걸 뜻하는 듯.
+                    
+                    // HTTP 요청 프로토콜에서 첫 번째 줄에 있는 요청 URI 정보를 추출한다.
                     requestURI = line.split(" ")[1];
                     firstLine = false;
                 }
-
-                // AppContainer로 실행을 요청
-                String result = aContainer.execute(requestURI);
-
-                // HTTP프로토콜에 따라 응답
+                
+                //System.out.println("execute() 실행 전");
+                // ApplicationContainer에게 실행을 위임한다.
+                String result = applicationContainer.execute(requestURI);
+                //System.out.println("execute() 실행 후");
+                
+                // HTTP 프로토톨에 따라 응답한다.
                 out.println("HTTP/1.1 200 OK");
                 out.println("Content-Type: text/plain;charset=UTF-8");
                 out.println();
                 out.println(result);
-
+                
             } catch (Exception e) {
                 out.println("서버 오류!");
                 e.printStackTrace(out);
@@ -93,11 +83,11 @@ public class HttpServer {
             } finally {
                 out.close();
                 in.close();
-                try {
-                    socket.close();
-                } catch (Exception e) {
-                }
+                try {socket.close();} catch (Exception e) {}
             }
         }
     }
 }
+
+//ver 30 - Thread 적용
+//ver 29 - 클래스 추가

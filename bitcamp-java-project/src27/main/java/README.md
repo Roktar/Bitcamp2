@@ -1,2 +1,12 @@
-# 변경내역
-- domain 패키지 내의 DTO 클래스 구조 변경 
+# 변경 내역
+- Board.java 변경
+- Classroom.java 변경
+- Member.java 변경
+- Task.java 변경
+- Team.java 변경
+- BoardDao.java 변경
+- ClassroomDao.java 변경
+- MemberDao.java 변경
+- TaskDao.java 변경
+- TeamDao.java 변경
+- TeamMemberDao.java 변경

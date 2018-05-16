@@ -1,3 +1,4 @@
+// ApplicationContainer 구현체
 package bitcamp.java106.pms;
 
 import java.io.PrintWriter;
@@ -13,19 +14,18 @@ public class DefaultApplicationContainer implements ApplicationContainer {
     ApplicationContext iocContainer;
     
     public DefaultApplicationContainer() throws Exception {
+        //=> 컨트롤러, DAO 등 클라이언트 요청을 처리하는 객체를 자동 생성한다.
         iocContainer = new ApplicationContext("bitcamp.java106.pms");
     }
     
     @Override
     public String execute(String requestURI) {
         // 클라이언트가 보낸 데이터에서 명령어와 데이터를 분리하여 객체를 준비한다.
-        // requestURI의 형식 : 예) /board/add?title=aaa&content=bbb
-        // serverRequest에서 상세한 명령어와 데이터들을 분리한다.
         ServerRequest request = new ServerRequest(requestURI);
         
         // 클라이언트 응답과 관련된 객체를 준비한다.
-        StringWriter memWriter = new StringWriter();
-        PrintWriter out = new PrintWriter(memWriter);
+        StringWriter memoryWriter = new StringWriter();
+        PrintWriter out = new PrintWriter(memoryWriter);
         
         ServerResponse response = new ServerResponse(out);
         
@@ -33,11 +33,13 @@ public class DefaultApplicationContainer implements ApplicationContainer {
         String path = request.getServerPath();
         Controller controller = (Controller) iocContainer.getBean(path);
         
-        if (controller != null)
+        if (controller != null) {
             controller.service(request, response);
-        else
+        } else {
             out.println("해당 명령을 처리할 수 없습니다.");
-        
-        return memWriter.toString();
+        }
+        return memoryWriter.toString();
     }
 }
+
+//ver 29 - 클래스 추가

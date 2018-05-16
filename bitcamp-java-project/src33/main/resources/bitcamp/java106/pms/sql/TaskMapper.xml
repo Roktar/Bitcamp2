@@ -3,65 +3,88 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<!-- 다음과 같이 DAO 클래스 이름과 같게하면 유지보수할 때 알아보기가 쉬워진다. -->
-<!-- 알아보기가 쉬운 것뿐만이 아니라 스프링과 연동할 때 DAO 객체를 자동 생성이 가능하다. -->
-
 <mapper namespace="bitcamp.java106.pms.dao.TaskDao">
-    <resultMap type="Task" id="TaskMap"> 
-        <id column="tano" property="no"/>
-        <result column="titl" property="title"/>
-        <result column="sdt" property="startDate"/>
-        <result column="edt" property="endDate"/>
-        <result column="stat" property="state"/>
-                
-        <association property="worker" javaType="Member">
-            <id column="mid" property="id"/>
-            <!-- 다음과 같은 역할을 한다. -->
-            <!-- 
-                Member obj = new Member();
-                obj.setId(rs.getString("mid"));
-                task.setWorker(obj);
-             -->
-            <!-- 
-                property는 해당 클래스에 저장한 변수명이고 자바타입은 자바에서 해당 타입이 어떤 클래스를 사용하는 지 기술해준다.
-                물론 Member는 alias처리를 config에서 했기때문에 그냥 적었다.
-             -->
-        </association>
-        <association property="team" javaType="Team">
-            <id column="tnm" property="name"/>
-        </association>
-        <!-- association은 join과 같은 역할을 하는 듯. -->
-        <!-- column은 현재 테이블의 컬럼명(Task), property는 해당 클래스(Member, Team)의 프로퍼티명. -->
-    </resultMap>
 
-  <!-- SQL문 id를 설정할 때 SQL문을 사용하는 함수 이름과 같게하면 유지보수할 때 알아보기 쉽다. -->
-  <!-- 알아보기쉬운 것 뿐만이 아니라 스프링과 연동할 때 DAO를 자동 생성하고 메소드를 자동생성할 때 사용할 수 있다. -->
-  <select id="selectList"  resultMap="TaskMap" parameterType="String">
-    select tano,titl,sdt,edt,stat,mid from pms_task where tnm = #{teamName}<!-- limit #{startIndex}, #{pageSize} -->
+  <resultMap type="Task" id="TaskMap">
+    <!-- Task task = new Task(); -->
+    
+    <id column="tano" property="no"/>
+    <!-- task.setNo(rs.getInt("tano")); -->
+    
+    <result column="titl" property="title"/>
+    <!-- task.setTitle(rs.getString("titl")); -->
+    
+    <result column="sdt" property="startDate"/>
+    <!-- task.setStartDate(rs.getDate("sdt")); -->
+    
+    <result column="edt" property="endDate"/>
+    <!-- task.setEndDate(rs.getDate("edt")); -->
+    
+    <result column="stat" property="state"/>
+    <!-- task.setState(rs.getInt("stat")); -->
+    
+    <association property="worker" javaType="Member">
+      <id column="mid" property="id"/>
+    </association>
+    <!-- Member obj = new Member();
+         obj.setId(rs.getString("mid"));
+         task.setWorker(obj);
+    -->
+     
+    <association property="team" javaType="Team">
+      <id column="tnm" property="name"/>
+    </association>
+    <!-- Team obj = new Team();
+         obj.setName(rs.getString("tnm"));
+         task.setTeam(obj);
+    -->
+  </resultMap>
+  
+  <select id="selectList" 
+          resultMap="TaskMap" parameterType="string">
+    select tano, titl, sdt, edt, stat, mid, tnm 
+    from pms_task
+    where tnm=#{value} 
+    <!--  limit #{startIndex}, #{pageSize} -->
   </select>
   
-  <insert id="insert" parameterType="Task" useGeneratedKeys="true" keyColumn="tano" keyProperty="no">
-    insert into pms_task(titl,sdt,edt,mid,tnm) values(#{title},#{startDate},#{endDate},#{worker.id},#{team.name}  );
+  <insert id="insert" parameterType="Task"
+          useGeneratedKeys="true" keyColumn="tano" keyProperty="no">
+    insert into pms_task(titl,sdt,edt,mid,tnm) 
+    values(#{title},#{startDate},#{endDate},#{worker.id},#{team.name})
   </insert>
   
-  <!-- parameterType이 primitive 타입이거나 wrapper클래스, String클래스인 경우? -->
-  <!-- 기본적으로 제공되는 숏네임을 사용할 수 있다. -->
-  <select id="selectOne" resultMap="TaskMap" parameterType="int">
-      select titl, sdt, edt, stat, mid, tnm from pms_task where tano = #{no}
+  <select id="selectOne" parameterType="int" resultMap="TaskMap">
+    select titl,sdt,edt,stat,mid,tnm 
+    from pms_task 
+    where tano=#{value}
   </select>
   
   <update id="update" parameterType="Task">
     update pms_task set 
-    titl = #{title}, sdt=#{startDate}, edt=#{endDate},
-    mid=#{worker.id}, tnm=#{team.name}
+      titl=#{title},
+      sdt=#{startDate},
+      edt=#{endDate},
+      mid=#{worker.id},
+      tnm=#{team.name} 
     where tano=#{no}
   </update>
   
-    <update id="update_state" parameterType="Task">
-    update pms_task set stat = #{state} where tano=#{no}
-  </update>
-  
   <delete id="delete" parameterType="int">
-    delete from pms_task where tano = #{no}
+    delete from pms_task 
+    where tano=#{value}
   </delete>
+  
+  <update id="updateState" parameterType="map">
+    update pms_task set 
+      stat=#{state} 
+    where tano=#{no}
+  </update>
 </mapper>
+
+
+
+
+
+
+

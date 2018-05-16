@@ -8,38 +8,32 @@ import java.util.Iterator;
 import java.util.Scanner;
 
 import bitcamp.java106.pms.annotation.Component;
-import bitcamp.java106.pms.domain.Member;
 import bitcamp.java106.pms.domain.Team;
 
 @Component
-public class TeamDao extends AbstractDAO<Team>{
+public class TeamDao extends AbstractDao<Team> {
+    
     public TeamDao() throws Exception {
-        this.load();
+        load();
     }
     
     public void load() throws Exception {
-        // 한줄씩 읽어들이는 게 없기때문에 스캐너를 통해 한줄씩 처리
         Scanner in = new Scanner(new FileReader("data/team.csv"));
-        
-        while( true ) {
+        while (true) {
             try {
                 String[] arr = in.nextLine().split(",");
                 Team team = new Team();
                 team.setName(arr[0]);
                 team.setDescription(arr[1]);
-                team.setMaxQty( Integer.parseInt(arr[2]) );
+                team.setMaxQty(Integer.parseInt(arr[2]));
                 team.setStartDate(Date.valueOf(arr[3]));
                 team.setEndDate(Date.valueOf(arr[4]));
-                insert(team);
-            } catch (Exception e) { 
-                break;
-                // 1) 데이터를 다 읽었을 때
-                // 2) 파일 형식에 문제 있을 때
+                this.insert(team);
+            } catch (Exception e) { // 데이터를 모두 읽었거나 파일 형식에 문제가 있다면,
+                //e.printStackTrace();
+                break; // 반복문을 나간다.
             }
         }
-        // 저장된 데이터를 한 줄씩 읽는다.
-        // 한 줄에 한 개의 게시물 데이터를 갖는다.
-        // 형식 : 번호, 제목, 내용, 등록일
         in.close();
     }
     
@@ -48,26 +42,35 @@ public class TeamDao extends AbstractDAO<Team>{
         
         Iterator<Team> teams = this.list();
         
-        // List에 보관된 데이터를 board.csv 파일에 저장한다.
-        // 기존에 저장된 데이터를 덮어쓴다. 즉 처음부터 다시 저장한다.
         while (teams.hasNext()) {
             Team team = teams.next();
-            out.printf("%s,%s,%d,%s~%s\n", team.getName(), team.getDescription(), 
-                                           team.getMaxQty(),
-                                           team.getStartDate(), team.getEndDate());
+            out.printf("%s,%s,%d,%s,%s\n", 
+                    team.getName(), team.getDescription(), team.getMaxQty(),
+                    team.getStartDate(), team.getEndDate());
         }
         out.close();
     }
-    
-
-    public int getIndex(Object key) {
-        String teamName = (String) key;
         
-        for(int i=0; i<data.size(); i++) {
-            if(data.get(i).getName().equalsIgnoreCase(teamName))
+    public int indexOf(Object key) {
+        String name = (String) key;
+        for (int i = 0; i < collection.size(); i++) {
+            if (name.equalsIgnoreCase(collection.get(i).getName())) {
                 return i;
+            }
         }
-        
         return -1;
     }
 }
+
+//ver 24 - File I/O 적용
+//ver 23 - @Component 애노테이션을 붙인다.
+//ver 22 - 추상 클래스 AbstractDao를 상속 받는다.
+//ver 19 - 우리 만든 ArrayList 대신 java.util.LinkedList를 사용하여 목록을 다룬다. 
+//ver 18 - ArrayList 클래스를 적용하여 객체(의 주소) 목록을 관리한다.
+//ver 16 - 인스턴스 변수를 직접 사용하는 대신 겟터, 셋터 사용.
+//ver 14 - TeamController로부터 데이터 관리 기능을 분리하여 TeamDao 생성.
+
+
+
+
+

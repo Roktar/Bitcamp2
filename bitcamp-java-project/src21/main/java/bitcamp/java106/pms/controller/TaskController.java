@@ -1,4 +1,4 @@
-// 팀 작업 관리 기능을 모아 둔 클래스
+// Controller 규칙에 따라 메서드 작성
 package bitcamp.java106.pms.controller;
 
 import java.sql.Date;
@@ -12,6 +12,8 @@ import bitcamp.java106.pms.domain.Task;
 import bitcamp.java106.pms.domain.Team;
 import bitcamp.java106.pms.util.Console;
 
+//TaskController는 Controller 규칙을 이행한다.
+//=> Controller 규칙에 따라 메서드를 만든다.
 public class TaskController implements Controller {
     
     Scanner keyScan;
@@ -124,7 +126,7 @@ public class TaskController implements Controller {
         System.out.print("작업 번호? ");
         int taskNo = Integer.parseInt(keyScan.nextLine());
         
-        Task task = taskDao.get(team.getName(), taskNo);
+        Task task = taskDao.get(taskNo);
         if (task == null) {
             System.out.printf("'%s'팀의 %d번 작업을 찾을 수 없습니다.\n",
                     team.getName(), taskNo);
@@ -144,7 +146,7 @@ public class TaskController implements Controller {
         System.out.print("변경할 작업의 번호? ");
         int taskNo = Integer.parseInt(keyScan.nextLine());
         
-        Task originTask = taskDao.get(team.getName(), taskNo);
+        Task originTask = taskDao.get(taskNo);
         if (originTask == null) {
             System.out.printf("'%s'팀의 %d번 작업을 찾을 수 없습니다.\n",
                     team.getName(), taskNo);
@@ -214,7 +216,7 @@ public class TaskController implements Controller {
         System.out.print("삭제할 작업의 번호? ");
         int taskNo = Integer.parseInt(keyScan.nextLine());
         
-        Task task = taskDao.get(team.getName(), taskNo);
+        Task task = taskDao.get(taskNo);
         if (task == null) {
             System.out.printf("'%s'팀의 %d번 작업을 찾을 수 없습니다.\n",
                     team.getName(), taskNo);
@@ -234,7 +236,7 @@ public class TaskController implements Controller {
         System.out.print("상태를 변경할 작업의 번호? ");
         int taskNo = Integer.parseInt(keyScan.nextLine());
         
-        Task task = taskDao.get(team.getName(), taskNo);
+        Task task = taskDao.get(taskNo);
         if (task == null) {
             System.out.printf("'%s'팀의 %d번 작업을 찾을 수 없습니다.\n",
                     team.getName(), taskNo);
@@ -270,4 +272,5 @@ public class TaskController implements Controller {
     }
 }
 
+//ver 18 - ArrayList가 적용된 TaskDao를 사용한다.
 //ver 17 - 클래스 생성

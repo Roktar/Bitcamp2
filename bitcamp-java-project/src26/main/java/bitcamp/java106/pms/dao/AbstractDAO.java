@@ -1,10 +1,10 @@
 package bitcamp.java106.pms.dao;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-public abstract class AbstractDAO<E> { // Generalization, 공통된 기능을 상위 클래스에 정의한다.
+public abstract class AbstractDao<E> {
+    
     protected LinkedList<E> collection = new LinkedList<>();
     
     public void insert(E value) {
@@ -16,7 +16,7 @@ public abstract class AbstractDAO<E> { // Generalization, 공통된 기능을 �
     }
     
     public E get(Object key) {
-        int index = this.getIndex(key);
+        int index = this.indexOf(key);
         if (index == -1)
             return null;
         return collection.get(index);
@@ -27,12 +27,23 @@ public abstract class AbstractDAO<E> { // Generalization, 공통된 기능을 �
     }
     
     public void delete(Object key) {
-        int index = this.getIndex(key);
+        int index = this.indexOf(key);
         if (index == -1)
             return;
         collection.remove(index);
     }
-        
-    public abstract int getIndex(Object key);
     
+    // 서브 클래스를 만들 때 반다시 다음 메서드를 정의할 것을 강제한다.
+    // 왜냐하면 다음 메서드는 get(), update(), delete()에서 사용하기 때문에
+    // 반드시 정의되어 있어야 한다.
+    public abstract int indexOf(Object key);
 }
+
+//ver 22 - generalization을 통해 클래스 추가
+
+
+
+
+
+
+

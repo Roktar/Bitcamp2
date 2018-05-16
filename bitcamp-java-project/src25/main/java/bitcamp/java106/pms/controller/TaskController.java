@@ -1,4 +1,4 @@
-// 팀 작업 관리 기능을 모아 둔 클래스
+// Controller 규칙에 따라 메서드 작성
 package bitcamp.java106.pms.controller;
 
 import java.sql.Date;
@@ -14,7 +14,7 @@ import bitcamp.java106.pms.domain.Task;
 import bitcamp.java106.pms.domain.Team;
 import bitcamp.java106.pms.util.Console;
 
-@Component(value="task")
+@Component("task")
 public class TaskController implements Controller {
     
     Scanner keyScan;
@@ -24,7 +24,7 @@ public class TaskController implements Controller {
     TeamMemberDao teamMemberDao;
     
     public TaskController(Scanner scanner, TeamDao teamDao, 
-                          MemberDao memberDao, TaskDao taskDao, TeamMemberDao teamMemberDao) {
+            TaskDao taskDao, TeamMemberDao teamMemberDao, MemberDao memberDao) {
         this.keyScan = scanner;
         this.teamDao = teamDao;
         this.taskDao = taskDao;
@@ -110,16 +110,15 @@ public class TaskController implements Controller {
     private void onTaskList(final Team team) {
         System.out.println("[팀 작업 목록]");
         
-        Iterator<Task> list = taskDao.list(team.getName());
-        Task task = null;
+        Iterator<Task> iterator = taskDao.list(team.getName());
         
-        while(list.hasNext()) {
-            task = list.next();
-                System.out.printf("%d,%s,%s,%s,%s\n", 
-                        task.getNo(), task.getTitle(), 
-                        task.getStartDate(), task.getEndDate(),
-                        (task.getWorker() == null) ? 
-                                "-" : task.getWorker().getId());
+        while (iterator.hasNext()) {
+            Task task = iterator.next();
+            System.out.printf("%d,%s,%s,%s,%s\n", 
+                    task.getNo(), task.getTitle(), 
+                    task.getStartDate(), task.getEndDate(),
+                    (task.getWorker() == null) ? 
+                            "-" : task.getWorker().getId());
         }
         System.out.println();
     }
@@ -129,7 +128,7 @@ public class TaskController implements Controller {
         System.out.print("작업 번호? ");
         int taskNo = Integer.parseInt(keyScan.nextLine());
         
-        Task task = taskDao.get(team.getName(), taskNo);
+        Task task = taskDao.get(taskNo);
         if (task == null) {
             System.out.printf("'%s'팀의 %d번 작업을 찾을 수 없습니다.\n",
                     team.getName(), taskNo);
@@ -149,7 +148,7 @@ public class TaskController implements Controller {
         System.out.print("변경할 작업의 번호? ");
         int taskNo = Integer.parseInt(keyScan.nextLine());
         
-        Task originTask = taskDao.get(team.getName(), taskNo);
+        Task originTask = taskDao.get(taskNo);
         if (originTask == null) {
             System.out.printf("'%s'팀의 %d번 작업을 찾을 수 없습니다.\n",
                     team.getName(), taskNo);
@@ -207,7 +206,8 @@ public class TaskController implements Controller {
         }
         
         if (Console.confirm("변경하시겠습니까?")) {
-            taskDao.update(task);
+            int index = taskDao.indexOf(task.getNo());
+            taskDao.update(index, task);
             System.out.println("변경하였습니다.");
         } else {
             System.out.println("취소하였습니다.");
@@ -219,7 +219,7 @@ public class TaskController implements Controller {
         System.out.print("삭제할 작업의 번호? ");
         int taskNo = Integer.parseInt(keyScan.nextLine());
         
-        Task task = taskDao.get(team.getName(), taskNo);
+        Task task = taskDao.get(taskNo);
         if (task == null) {
             System.out.printf("'%s'팀의 %d번 작업을 찾을 수 없습니다.\n",
                     team.getName(), taskNo);
@@ -239,7 +239,7 @@ public class TaskController implements Controller {
         System.out.print("상태를 변경할 작업의 번호? ");
         int taskNo = Integer.parseInt(keyScan.nextLine());
         
-        Task task = taskDao.get(team.getName(), taskNo);
+        Task task = taskDao.get(taskNo);
         if (task == null) {
             System.out.printf("'%s'팀의 %d번 작업을 찾을 수 없습니다.\n",
                     team.getName(), taskNo);
@@ -275,4 +275,7 @@ public class TaskController implements Controller {
     }
 }
 
+//ver 23 - @Component 애노테이션을 붙인다.
+//ver 22 - TaskDao 변경 사항에 맞춰 이 클래스를 변경한다.
+//ver 18 - ArrayList가 적용된 TaskDao를 사용한다.
 //ver 17 - 클래스 생성

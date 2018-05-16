@@ -6,8 +6,9 @@ public class Task {
     public static final int READY = 0;
     public static final int WORKING = 1;
     public static final int COMPLETE = 9;
-    private static int count = 1;
     
+    private static int count = 1;
+
     private int no;
     private String title;
     private Date startDate;
@@ -17,12 +18,12 @@ public class Task {
     private Team team;
     
     public Task(Team team) {
-        this.team = team;
         this.no = count++;
+        this.team = team;
     }
     
     public Task(Team team, String title, Date startDate, Date endDate) {
-        this.team = team;
+        this(team);
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -80,3 +81,7 @@ public class Task {
 }
 
 //ver 17 - 사용자 정의 데이터 타입 생성
+
+
+
+

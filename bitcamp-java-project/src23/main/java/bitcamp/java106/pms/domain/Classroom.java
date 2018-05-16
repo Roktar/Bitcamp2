@@ -3,13 +3,22 @@ package bitcamp.java106.pms.domain;
 import java.sql.Date;
 
 public class Classroom {
-    private static int count = 1;
+    private static int count;
+    
     private int no;
-    private String title, place;
-    private Date startDate, endDate;
+    private String title;
+    private Date startDate;
+    private Date endDate;
+    private String room;
     
     public Classroom() {
-        this.no = count++;
+        this.no = ++count;
+    }
+    
+    @Override
+    public String toString() {
+        return "Classroom [no=" + no + ", title=" + title + ", startDate=" + startDate + ", endDate=" + endDate
+                + ", room=" + room + "]";
     }
     
     public int getNo() {
@@ -24,12 +33,6 @@ public class Classroom {
     public void setTitle(String title) {
         this.title = title;
     }
-    public String getPlace() {
-        return place;
-    }
-    public void setPlace(String place) {
-        this.place = place;
-    }
     public Date getStartDate() {
         return startDate;
     }
@@ -42,4 +45,12 @@ public class Classroom {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
+    public String getRoom() {
+        return room;
+    }
+    public void setRoom(String room) {
+        this.room = room;
+    }
+    
+    
 }

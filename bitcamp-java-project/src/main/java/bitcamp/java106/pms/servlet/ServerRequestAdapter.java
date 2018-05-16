@@ -4,24 +4,28 @@ import javax.servlet.http.HttpServletRequest;
 
 import bitcamp.java106.pms.server.ServerRequest;
 
-// 기존 소스를 건들지않고 필요기능을 추가하는 방법 : ADAPTER 패턴
-public class ServerRequestAdapter extends ServerRequest{
-    
+public class ServerRequestAdapter extends ServerRequest {
     HttpServletRequest request;
     
     public ServerRequestAdapter(HttpServletRequest request) {
         super("");
-        this.request=request;
+        this.request = request;
     }
     
-    // 상속받은 메소드를 현재 클래스의 역할에 맞게끔 재정의 - OVERRIDING
+    // 상속 받은 메서드를 현재 클래스의 역할에 맞게끔 재정의하기 - 오버라이딩(overriding)
     @Override
     public String getParameter(String name) {
         return request.getParameter(name);
     }
     
-    @Override // 기존 기능을 사용하지않는다 : ADAPTER
+    @Override
     public String getServerPath() {
         return request.getPathInfo();
     }
+    
 }
+
+
+
+
+

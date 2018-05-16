@@ -27,11 +27,7 @@ public class TaskDao {
             
             stmt.setInt(1, no);
             return stmt.executeUpdate();
-        } catch (Exception e) {
-            //System.out.println("오류!");
-            // 로그 파일에 기록을 남긴다.
-            throw e;
-        }
+        } 
     }
     
     public List<Task> selectList(String teamName) throws Exception {
@@ -127,14 +123,12 @@ public class TaskDao {
     }
 
     public int updateState(int no, int state) throws Exception {
-        
-        Class.forName("com.mysql.cj.jdbc.Driver");
         try (
             Connection con = DriverManager.getConnection(
                 "jdbc:mysql://localhost:3306/java106db?serverTimezone=UTC&useSSL=false",
                 "java106", "1111");
             PreparedStatement stmt = con.prepareStatement(
-                "update pms_task set stat where tano=?");) {
+                "update pms_task set stat=? where tano=?");) {
             
             stmt.setInt(1, state);
             stmt.setInt(2, no);
@@ -150,3 +144,8 @@ public class TaskDao {
 //ver 19 - 우리 만든 ArrayList 대신 java.util.LinkedList를 사용하여 목록을 다룬다. 
 //ver 18 - ArrayList 클래스를 적용하여 객체(의 주소) 목록을 관리한다.
 // ver 17 - 클래스 생성
+
+
+
+
+

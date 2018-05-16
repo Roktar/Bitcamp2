@@ -10,6 +10,7 @@ import bitcamp.java106.pms.dao.MemberDao;
 import bitcamp.java106.pms.dao.TaskDao;
 import bitcamp.java106.pms.dao.TeamDao;
 import bitcamp.java106.pms.dao.TeamMemberDao;
+import bitcamp.java106.pms.domain.Member;
 import bitcamp.java106.pms.domain.Task;
 import bitcamp.java106.pms.domain.Team;
 import bitcamp.java106.pms.server.ServerRequest;
@@ -35,28 +36,31 @@ public class TaskUpdateController implements Controller {
     @Override
     public void service(ServerRequest request, ServerResponse response) {
         PrintWriter out = response.getWriter();
-
+        
         try {
             Task task = new Task()
-                                .setNo(Integer.parseInt(request.getParameter("no")))
-                                .setTitle(request.getParameter("title"))
-                                .setStartDate(Date.valueOf(request.getParameter("startDate")))
-                                .setEndDate(Date.valueOf(request.getParameter("endDate")))
-                                .setWorker(this.memberDao.selectOne(request.getParameter("memberId")));
+                .setNo(Integer.parseInt(request.getParameter("no")))
+                .setTitle(request.getParameter("title"))
+                .setStartDate(Date.valueOf(request.getParameter("startDate")))
+                .setEndDate(Date.valueOf(request.getParameter("endDate")))
+                .setTeam(new Team().setName(request.getParameter("teamName")))
+                .setWorker(new Member().setId(request.getParameter("memberId")));
             
             int count = taskDao.update(task);
-            
-            if(count == 0)
-                out.println("수정하지 못했습니다.");
-            else
+            if (count == 0) {
+                out.println("해당 작업이 없습니다.");
+            } else {
                 out.println("변경하였습니다.");
-        } catch(Exception e) {
-            out.println("변경 실패");
+            }
+        } catch (Exception e) {
+            out.println("변경 실패!");
             e.printStackTrace(out);
         }
     }
+
 }
 
+//ver 31 - JDBC API가 적용된 DAO 사용
 //ver 28 - 네트워크 버전으로 변경
 //ver 26 - TaskController에서 update() 메서드를 추출하여 클래스로 정의.
 //ver 23 - @Component 애노테이션을 붙인다.

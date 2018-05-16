@@ -1,3 +1,10 @@
 # 변경 내역
-- jdbc 패키지 생성
-- ConnectionProxy.java 생성
+- pms2_xxx 테이블 생성
+- XxxMapper.xml 파일 변경
+
+ 
+
+
+
+
+

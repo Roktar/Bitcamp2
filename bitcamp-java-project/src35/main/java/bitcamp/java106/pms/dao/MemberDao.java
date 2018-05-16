@@ -7,54 +7,61 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.stereotype.Component;
 
 import bitcamp.java106.pms.domain.Member;
-import bitcamp.java106.pms.jdbc.DataSource;
 
 @Component
 public class MemberDao {
+
+    SqlSessionFactory sqlSessionFactory;
     
-    SqlSessionFactory factory;
-    
-    public MemberDao(SqlSessionFactory factory) {
-        this.factory = factory;
+    public MemberDao(SqlSessionFactory sqlSessionFactory) {
+        this.sqlSessionFactory = sqlSessionFactory;
     }
-    
+        
     public int delete(String id) throws Exception {
-        try (SqlSession session = factory.openSession();) {
-            int count =  session.delete("bitcamp.java106.pms.dao.MemberDao.delete", id);
-            session.commit();
+        try (SqlSession sqlSession = this.sqlSessionFactory.openSession()) {
+            int count = sqlSession.delete(
+                    "bitcamp.java106.pms.dao.MemberDao.delete", id);
+            sqlSession.commit();
             return count;
         }
     }
     
     public List<Member> selectList() throws Exception {
-        try (SqlSession session = factory.openSession();) {
-            return session.selectList("bitcamp.java106.pms.dao.MemberDao.selectList");
+        try (SqlSession sqlSession = this.sqlSessionFactory.openSession()) {
+            return sqlSession.selectList(
+                    "bitcamp.java106.pms.dao.MemberDao.selectList");
         }
     }
-    
+
     public int insert(Member member) throws Exception {
-        try (SqlSession session = factory.openSession();) {
-            int count =  session.insert("bitcamp.java106.pms.dao.MemberDao.insert", member);
-            session.commit();
+        try (SqlSession sqlSession = this.sqlSessionFactory.openSession()) {
+            int count = sqlSession.insert(
+                    "bitcamp.java106.pms.dao.MemberDao.insert", member);
+            sqlSession.commit();
             return count;
         }
     }
-    
+
     public int update(Member member) throws Exception {
-        try (SqlSession session = factory.openSession();) {
-            int count =  session.update("bitcamp.java106.pms.dao.MemberDao.update", member);
-            session.commit();
+        try (SqlSession sqlSession = this.sqlSessionFactory.openSession()) {
+            int count = sqlSession.update(
+                    "bitcamp.java106.pms.dao.MemberDao.update", member);
+            sqlSession.commit();
             return count;
         }
     }
-    
+
     public Member selectOne(String id) throws Exception {
-        try (SqlSession session = factory.openSession();) {
-            return session.selectOne("bitcamp.java106.pms.dao.MemberDao.selectOne", id);
-        }
-    }
+        try (SqlSession sqlSession = this.sqlSessionFactory.openSession()) {
+            return sqlSession.selectOne(
+                    "bitcamp.java106.pms.dao.MemberDao.selectOne", id);
+        }   
+    }    
 }
 
+//ver 33 - Mybatis 적용
+//ver 32 - DB 커넥션 풀 적용
+//ver 31 - JDBC API 적용
 //ver 24 - File I/O 적용
 //ver 23 - @Component 애노테이션을 붙인다.
 //ver 22 - 추상 클래스 AbstractDao를 상속 받는다.

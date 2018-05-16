@@ -3,17 +3,16 @@
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-  <properties resource="bitcamp/java106/pms/sql/jdbc.properties"> </properties>
-  
-    <!-- 클래스의 풀네임이 아닌 숏네임을 사용할 수 있도록 지정 -->
-    <typeAliases>
-        <typeAlias type="bitcamp.java106.pms.domain.Board" alias="Board"/>
-        <typeAlias type="bitcamp.java106.pms.domain.Classroom" alias="Classroom"/>
-        <typeAlias type="bitcamp.java106.pms.domain.Member" alias="Member"/>
-        <typeAlias type="bitcamp.java106.pms.domain.Task" alias="Task"/>
-        <typeAlias type="bitcamp.java106.pms.domain.Team" alias="Team"/>
-    </typeAliases>  
-    
+  <properties resource="bitcamp/java106/pms/sql/jdbc.properties"></properties>
+
+  <typeAliases>
+    <typeAlias type="bitcamp.java106.pms.domain.Board" alias="Board"/>
+    <typeAlias type="bitcamp.java106.pms.domain.Classroom" alias="Classroom"/>
+    <typeAlias type="bitcamp.java106.pms.domain.Member" alias="Member"/>
+    <typeAlias type="bitcamp.java106.pms.domain.Task" alias="Task"/>
+    <typeAlias type="bitcamp.java106.pms.domain.Team" alias="Team"/>
+  </typeAliases>
+
   <environments default="development">
     <environment id="development">
       <transactionManager type="JDBC"/>
@@ -25,12 +24,20 @@
       </dataSource>
     </environment>
   </environments>
+  
   <mappers>
-    <mapper resource="bitcamp/java106/pms/sql/boardMapper.xml"/>
+    <mapper resource="bitcamp/java106/pms/sql/BoardMapper.xml"/>
     <mapper resource="bitcamp/java106/pms/sql/ClassroomMapper.xml"/>
     <mapper resource="bitcamp/java106/pms/sql/MemberMapper.xml"/>
+    <mapper resource="bitcamp/java106/pms/sql/TaskMapper.xml"/>
     <mapper resource="bitcamp/java106/pms/sql/TeamMapper.xml"/>
     <mapper resource="bitcamp/java106/pms/sql/TeamMemberMapper.xml"/>
-    <mapper resource="bitcamp/java106/pms/sql/TaskMapper.xml"/>
   </mappers>
 </configuration>
+
+
+
+
+
+
+

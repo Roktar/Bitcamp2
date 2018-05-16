@@ -1,50 +1,42 @@
 package bitcamp.java106.pms;
 
-import java.sql.Date;
 import java.util.HashMap;
 import java.util.Scanner;
 
 import bitcamp.java106.pms.context.ApplicationContext;
-import bitcamp.java106.pms.controller.BoardController;
-import bitcamp.java106.pms.controller.ClassController;
 import bitcamp.java106.pms.controller.Controller;
-import bitcamp.java106.pms.controller.MemberController;
-import bitcamp.java106.pms.controller.TaskController;
-import bitcamp.java106.pms.controller.TeamController;
-import bitcamp.java106.pms.controller.TeamMemberController;
 import bitcamp.java106.pms.dao.BoardDao;
-import bitcamp.java106.pms.dao.ClassDao;
+import bitcamp.java106.pms.dao.ClassroomDao;
 import bitcamp.java106.pms.dao.MemberDao;
 import bitcamp.java106.pms.dao.TaskDao;
 import bitcamp.java106.pms.dao.TeamDao;
 import bitcamp.java106.pms.dao.TeamMemberDao;
-import bitcamp.java106.pms.domain.Member;
-import bitcamp.java106.pms.domain.Team;
 import bitcamp.java106.pms.util.Console;
 
 public class App {
+    
     static ApplicationContext iocContainer;
+    
     static Scanner keyScan = new Scanner(System.in);
     public static String option = null; 
     
-    static void onQuit() throws Exception { // 매개변수 주고 처리하는 게 괜찮을듯.
+    static void onQuit() {
         System.out.println("안녕히 가세요!");
         BoardDao boardDao = (BoardDao) iocContainer.getBean(BoardDao.class);
-        TeamDao teamDao = (TeamDao) iocContainer.getBean(BoardDao.class);
-        MemberDao memberDao = (MemberDao) iocContainer.getBean(BoardDao.class);
-        TaskDao taskDao = (TaskDao) iocContainer.getBean(BoardDao.class);
-        TeamMemberDao teamMemberDao = (TeamMemberDao) iocContainer.getBean(BoardDao.class);
-        ClassDao classDao = (ClassDao) iocContainer.getBean(BoardDao.class);
-        
+        ClassroomDao classroomDao = (ClassroomDao) iocContainer.getBean(ClassroomDao.class);
+        MemberDao memberDao = (MemberDao) iocContainer.getBean(MemberDao.class);
+        TaskDao taskDao = (TaskDao) iocContainer.getBean(TaskDao.class);
+        TeamDao teamDao = (TeamDao) iocContainer.getBean(TeamDao.class);
+        TeamMemberDao teamMemberDao = (TeamMemberDao) iocContainer.getBean(TeamMemberDao.class);
         try {
             boardDao.save();
-            teamDao.save();
+            classroomDao.save();
             memberDao.save();
             taskDao.save();
+            teamDao.save();
             teamMemberDao.save();
-            classDao.save();
-        } catch(Exception e) {
-            System.out.println("저장 중 오류 발생");
+        } catch (Exception e) {
+            System.out.println("게시물 데이터 저장 중 오류 발생!");
         }
     }
 
@@ -60,23 +52,26 @@ public class App {
     }
 
     public static void main(String[] args) throws Exception {
+        
         // 기본 객체 준비
-        HashMap<String, Object> defaultBeans = new HashMap<>();
+        HashMap<String,Object> defaultBeans = new HashMap<>();
         defaultBeans.put("java.util.Scanner", keyScan);
         
-        // 기본객체와 함께 어노테이션이 붙은 클래스의 객체를 준비
-        iocContainer = new ApplicationContext("bitcamp.java106.pms", defaultBeans);
-
+        // 기본 객체와 함께 @Component가 붙은 클래스의 객체를 준비한다.
+        iocContainer = new ApplicationContext(
+                "bitcamp.java106.pms", defaultBeans);
+        
         Console.keyScan = keyScan;
 
         while (true) {
             String[] arr = Console.prompt();
 
             String menu = arr[0];
-            if (arr.length == 2) 
+            if (arr.length == 2) {
                 option = arr[1];
-             else 
+            } else {
                 option = null;
+            }
             
             if (menu.equals("quit")) {
                 onQuit();
@@ -86,7 +81,7 @@ public class App {
             } else {
                 int slashIndex = menu.lastIndexOf("/");
                 String controllerKey = (slashIndex < 0) ? 
-                                        menu : menu.substring(0, slashIndex);
+                        menu : menu.substring(0, slashIndex);
                 
                 Controller controller = (Controller) iocContainer.getBean(controllerKey);
                 
@@ -102,6 +97,13 @@ public class App {
     }
 }
 
+//ver 24 - 파일 저장 기능 호출. 멤버 및 팀 데이터를 준비하는 메서드 제거.
 //ver 17 - Task 관리 기능 추가
 // ver 15 - TeamDao와 MemberDao 객체 생성. 
 //          팀 멤버를 다루는 메뉴 추가.
+
+
+
+
+
+
