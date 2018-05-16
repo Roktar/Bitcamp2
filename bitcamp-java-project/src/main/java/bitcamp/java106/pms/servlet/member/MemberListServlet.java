@@ -60,7 +60,7 @@ public class MemberListServlet extends HttpServlet {
                     member.getId(),
                         member.getId(), 
                     member.getEmail()
-                    );
+                    ); 
                 out.println("</tr>");
             }
             out.println("</table>");
