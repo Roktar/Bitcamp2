@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 다음과 같이 DAO 클래스 이름과 같게하면 유지보수할 때 알아보기가 쉬워진다. -->
+<!-- 알아보기가 쉬운 것뿐만이 아니라 스프링과 연동할 때 DAO 객체를 자동 생성이 가능하다. -->
+
+<mapper namespace="bitcamp.java106.pms.dao.ClassroomDao">
+    <resultMap type="Classroom" id="ClassroomMap"> 
+        <id column="crno" property="no"/>
+        <result column="titl" property="title"/>
+        <result column="sdt" property="startDate"/>
+        <result column="edt" property="endDate"/>
+        <result column="room" property="room"/>
+    </resultMap>
+
+  <!-- SQL문 id를 설정할 때 SQL문을 사용하는 함수 이름과 같게하면 유지보수할 때 알아보기 쉽다. -->
+  <!-- 알아보기쉬운 것 뿐만이 아니라 스프링과 연동할 때 DAO를 자동 생성하고 메소드를 자동생성할 때 사용할 수 있다. -->
+  <select id="selectList"  resultMap="ClassroomMap" parameterType="map">
+    select crno, titl, sdt, edt, room from pms2_classroom <!-- limit #{startIndex}, #{pageSize} -->
+  </select>
+  
+  <insert id="insert" parameterType="Classroom" useGeneratedKeys="true" keyColumn="crno" keyProperty="no">
+    insert into pms2_classroom(titl, sdt, edt, room) values(#{title}, #{startDate}, #{endDate}, #{room});
+  </insert>
+  
+  <!-- parameterType이 primitive 타입이거나 wrapper클래스, String클래스인 경우? -->
+  <!-- 기본적으로 제공되는 숏네임을 사용할 수 있다. -->
+  <select id="selectOne" resultMap="ClassroomMap" parameterType="int">
+      select crno, titl, sdt, edt, room from pms2_classroom where crno = #{no}
+  </select>
+  
+  <update id="update" parameterType="Classroom">
+    update pms2_classroom set titl=#{title}, sdt=#{startDate}, edt=#{endDate}, room=#{room} where crno=#{no}
+  </update>
+  
+  <delete id="delete" parameterType="int">
+    delete from pms2_classroom where crno = #{no}
+  </delete>
+  
+</mapper>

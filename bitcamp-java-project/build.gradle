@@ -1,0 +1,43 @@
+
+// eclipse관련 파일 생성 및 제거 명령어가 포함된 플러그인
+apply plugin: 'eclipse-wtp'
+
+// 자바관련 작업 명령어가 포함된 플러그인
+apply plugin: 'java'
+
+// web archive 파일을 다루는 명령어가 포함된 플러그인
+apply plugin: 'war'
+
+compileJava {
+    // 소스 파일 인코딩 옵션을 추가한다.
+    options.encoding='UTF-8'
+}
+
+war {
+    // war 파일 생성 시 사용할 파일명 설정
+    // 미지정 시 프로젝트 이름으로 생성된다.
+    archiveName = "pms.war"
+}
+
+// 프로젝트에서 사용하는 의존 라이브러리를 외부 디렉토리로 복사하는 명령 추가
+task copyJars(type: Copy) {
+    from configurations.runtime
+    into "build/libs/deps"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // jdbc connector
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.11'
+    // MyBatis Library
+    compile group: 'org.mybatis', name: 'mybatis', version: '3.4.6'
+    // Spring Library
+    compile group: 'org.springframework', name: 'spring-context', version: '5.0.5.RELEASE'
+    // Servlet Library
+    providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
+}
+
+
