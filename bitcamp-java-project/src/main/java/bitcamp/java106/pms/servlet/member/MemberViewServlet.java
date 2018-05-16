@@ -49,7 +49,7 @@ public class MemberViewServlet extends HttpServlet {
         try {
             Member member = memberDao.selectOne(id);
             if (member == null) {
-                throw new Exception("유효하지 않은 회원 번호입니다.");
+                throw new Exception("유효하지 않은 회원 아이디입니다.");
             }
             out.println("<table border='1'>");
             out.println("<tr><th>아이디</th><td>");
